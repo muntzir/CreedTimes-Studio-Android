@@ -1,5 +1,4 @@
 name: Build CreedTimes Studio APK
-# source bundle complete
 
 on:
   push:
@@ -12,12 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Reconstruct Android source
+      - name: Verify and extract Android source
         shell: bash
         run: |
-          cat bundle1k/chunk_* > android-source.b64
-          test "$(wc -c < android-source.b64)" -eq 67580
-          base64 -d android-source.b64 > CreedTimes_Studio_Android_Project_v1.zip
+          test -f CreedTimes_Studio_Android_Project_v1.zip
           echo "5906db35443cfaf2331b9a5d5afa68ba3e6ead63297211d14d6afcf2819d9909  CreedTimes_Studio_Android_Project_v1.zip" | sha256sum -c -
           unzip -q CreedTimes_Studio_Android_Project_v1.zip
           test -f CreedTimes_Studio_Android_Source/app/build.gradle
@@ -33,19 +30,25 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build debug APK
-        working-directory: CreedTimes_Studio_Android_Source
+      - name: Install Android SDK packages
         shell: bash
         run: |
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
-          gradle assembleDebug --stacktrace
+
+      - name: Build debug APK
+        working-directory: CreedTimes_Studio_Android_Source
+        shell: bash
+        run: gradle assembleDebug --stacktrace
 
       - name: Prepare APK
         shell: bash
-        run: cp CreedTimes_Studio_Android_Source/app/build/outputs/apk/debug/app-debug.apk CreedTimes-Studio.apk
+        run: |
+          cp CreedTimes_Studio_Android_Source/app/build/outputs/apk/debug/app-debug.apk CreedTimes-Studio.apk
+          test -s CreedTimes-Studio.apk
 
       - uses: actions/upload-artifact@v4
         with:
           name: CreedTimes-Studio-APK
           path: CreedTimes-Studio.apk
+          if-no-files-found: error
