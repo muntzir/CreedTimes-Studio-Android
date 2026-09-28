@@ -1,0 +1,48 @@
+name: Build Creed Times News APK
+
+on:
+  push:
+    branches: [ creedtimes-news-app ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct Android source
+        shell: bash
+        run: |
+          cat news_bundle/chunk_* > android-news-source.b64
+          test "$(wc -c < android-news-source.b64)" -eq 33396
+          base64 -d android-news-source.b64 > CreedTimes_News_Android_Project_v1.zip
+          echo "c52b6f68407c52308d80d5c64a7ea6a05594203a11e3c4093e673cb77bf311ce  CreedTimes_News_Android_Project_v1.zip" | sha256sum -c -
+          unzip -q CreedTimes_News_Android_Project_v1.zip
+          test -f CreedTimes_News_Android_Source/app/build.gradle
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build debug APK
+        working-directory: CreedTimes_News_Android_Source
+        shell: bash
+        run: gradle assembleDebug --stacktrace
+
+      - name: Prepare APK
+        shell: bash
+        run: |
+          cp CreedTimes_News_Android_Source/app/build/outputs/apk/debug/app-debug.apk CreedTimes-News.apk
+          test -s CreedTimes-News.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CreedTimes-News-APK
+          path: CreedTimes-News.apk
+          if-no-files-found: error
