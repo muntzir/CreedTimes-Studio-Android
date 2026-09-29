@@ -1,14 +1,13 @@
 {
-  "version": 2,
+  "version": 3,
   "updated_at": "2026-09-30",
   "policy": "headline_link_only",
   "sources": [
     {"id":"aljazeera","name":"Al Jazeera","language":"en","url":"https://www.aljazeera.com/xml/rss/all.xml","enabled":true},
     {"id":"reuters","name":"Reuters","language":"en","url":"https://news.google.com/rss/search?q=site%3Areuters.com&hl=en-US&gl=US&ceid=US%3Aen","enabled":true},
-    {"id":"bbc-en","name":"BBC News","language":"en","url":"https://news.google.com/rss/search?q=site%3Abbc.com%2Fnews&hl=en-GB&gl=GB&ceid=GB%3Aen","enabled":true},
     {"id":"presstv","name":"Press TV","language":"en","url":"https://news.google.com/rss/search?q=site%3Apresstv.ir&hl=en-US&gl=US&ceid=US%3Aen","enabled":true},
-    {"id":"dawn","name":"Dawn","language":"en","url":"https://www.dawn.com/feeds/home","enabled":true},
-    {"id":"independent-urdu","name":"Independent Urdu","language":"ur","url":"https://www.independenturdu.com/rss.xml","enabled":true},
+    {"id":"bbc-en","name":"BBC News","language":"en","url":"https://news.google.com/rss/search?q=site%3Abbc.com%2Fnews&hl=en-GB&gl=GB&ceid=GB%3Aen","enabled":true},
+    {"id":"independent-urdu","name":"Independent Urdu","language":"ur","url":"https://news.google.com/rss/search?q=site%3Aindependenturdu.com&hl=ur&gl=PK&ceid=PK%3Aur","enabled":true},
     {"id":"bbc-ur","name":"BBC Urdu","language":"ur","url":"https://news.google.com/rss/search?q=site%3Abbc.com%2Furdu&hl=ur&gl=PK&ceid=PK%3Aur","enabled":true}
   ]
 }
