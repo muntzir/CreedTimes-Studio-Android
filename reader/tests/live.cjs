@@ -13,6 +13,7 @@ const {chromium}=require('playwright');const fs=require('fs'),path=require('path
   const info=await page.evaluate(()=>({tab:state.tab,error:state.error,posts:state.posts.length,query:query(),first:state.posts[0]?{id:state.posts[0].id,title:title(state.posts[0]),media:mediaLinks(state.posts[0])}:null}));
   if(info.error)throw Error(JSON.stringify(info));summary.push(info);
   await page.screenshot({path:path.join(output,'live-'+tab+'.png'),fullPage:false});
+  if(['video','audio'].includes(tab)&&info.first){await page.locator('[data-post="'+info.first.id+'"]').first().click();await page.locator('[data-media]').first().waitFor();await page.click('[data-action="back"]');}
  }
  fs.writeFileSync(path.join(output,'live-tabs.json'),JSON.stringify(summary,null,2));console.log('LIVE TABS',JSON.stringify(summary));
  await browser.close();

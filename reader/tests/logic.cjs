@@ -28,3 +28,5 @@ console.log('PASS: Artworks category/tag union, Articles taxonomy and non-media 
 run("state.cats=[];state.tags=[];state.templates=[{id:70,name:'Podcast',slug:'podcast'},{id:71,name:'Video',slug:'video'}];state.tab='audio'");query=new URLSearchParams(run('query()').split('?')[1]);assert.equal(query.get('post_template'),'70');
 run("state.tab='articles'");query=new URLSearchParams(run('query()').split('?')[1]);assert.equal(query.get('post_template_exclude'),'71,70');
 console.log('PASS: website post_template taxonomy mapping and article exclusions.');
+
+assert.equal(run("contentKind({categories:[],tags:[],post_template:[70]})"),'audio');console.log('PASS: website-only podcast player fallback classification.');
