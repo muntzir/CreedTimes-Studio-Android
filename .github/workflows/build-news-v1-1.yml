@@ -1,0 +1,67 @@
+name: Build Creed Times News v1.1 APK
+
+on:
+  push:
+    branches: [ creedtimes-news-v1-1 ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct v1.1 Android source
+        shell: bash
+        run: |
+          cat news_v11_bundle/chunk_* > creedtimes-news-v1.1.b64
+          test "$(wc -c < creedtimes-news-v1.1.b64)" -eq 68740
+          base64 -d creedtimes-news-v1.1.b64 > CreedTimes-News-v1.1-Source.zip
+          echo "60e58b871f37c18e0876238d65d959cdb98bb47793706aea4e1c08d6c94592e1  CreedTimes-News-v1.1-Source.zip" | sha256sum -c -
+          mkdir appsrc
+          unzip -q CreedTimes-News-v1.1-Source.zip -d appsrc
+          test -f appsrc/app/build.gradle
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Validate app logic
+        working-directory: appsrc
+        shell: bash
+        run: |
+          node --check app/src/main/assets/app.js
+          node tests/logic.cjs
+
+      - name: Install Android SDK 35
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Build and lint debug APK
+        working-directory: appsrc
+        shell: bash
+        run: gradle --no-daemon :app:assembleDebug :app:lintDebug --stacktrace
+
+      - name: Prepare APK
+        shell: bash
+        run: |
+          cp appsrc/app/build/outputs/apk/debug/app-debug.apk CreedTimes-News-v1.1.apk
+          test -s CreedTimes-News-v1.1.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CreedTimes-News-v1.1-APK
+          path: CreedTimes-News-v1.1.apk
+          if-no-files-found: error
