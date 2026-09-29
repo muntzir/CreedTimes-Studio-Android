@@ -1,0 +1,63 @@
+name: Creed Times Reader APK
+on:
+  push:
+    branches: [reader-app-v1.1]
+    paths: ['reader/**', '.github/workflows/reader-apk.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Check feed and tab logic
+        working-directory: reader
+        run: node --check app/src/main/assets/app.js && node tests/logic.cjs
+      - name: Build and lint
+        working-directory: reader
+        run: gradle --no-daemon :app:assembleDebug :app:lintDebug --stacktrace
+      - name: Verify installable APK
+        run: |
+          cp reader/app/build/outputs/apk/debug/app-debug.apk CreedTimes-Reader-v1.1.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose CreedTimes-Reader-v1.1.apk
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging CreedTimes-Reader-v1.1.apk | head -20
+          sha256sum CreedTimes-Reader-v1.1.apk > CreedTimes-Reader-v1.1.apk.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CreedTimes-Reader-v1.1-APK
+          path: |
+            CreedTimes-Reader-v1.1.apk
+            CreedTimes-Reader-v1.1.apk.sha256
+          if-no-files-found: error
+  interface:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test tooling
+        working-directory: reader
+        run: npm install --no-save playwright@1.56.1 && npx playwright install --with-deps chromium
+      - name: Verify mobile interface
+        working-directory: reader
+        run: node tests/ui.cjs
+      - name: Inspect public website API
+        if: always()
+        working-directory: reader
+        run: python3 tests/probe-site.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Reader-interface-and-site-checks
+          path: reader/tests/results/
