@@ -1,0 +1,90 @@
+name: Build Creed Times News v1.7 APK
+
+on:
+  push:
+    branches: [ creedtimes-news-v1-7 ]
+    paths:
+      - 'v17_patch_gz_b64/**'
+      - '.github/workflows/build-news-v1-7.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct v1.6 Android source
+        shell: bash
+        run: |
+          cat news_v11_bundle/chunk_* > creedtimes-news-v1.1.b64
+          test "$(wc -c < creedtimes-news-v1.1.b64)" -eq 68740
+          base64 -d creedtimes-news-v1.1.b64 > CreedTimes-News-v1.1-Source.zip
+          echo "60e58b871f37c18e0876238d65d959cdb98bb47793706aea4e1c08d6c94592e1  CreedTimes-News-v1.1-Source.zip" | sha256sum -c -
+          mkdir appsrc
+          unzip -q CreedTimes-News-v1.1-Source.zip -d appsrc
+
+          : > /tmp/v12.patch
+          for f in v12_patch_b64/chunk_*; do base64 -d "$f" >> /tmp/v12.patch; done
+          (cd appsrc && patch -p0 < /tmp/v12.patch)
+          sed -i 's/monogram\.png/monogram.webp/g' appsrc/app/src/main/assets/app.js
+
+          python3 v13_overrides/apply_v13.py appsrc
+          python3 v14_overrides/apply_v14.py appsrc
+
+          : > /tmp/v15.patch
+          for f in v15_patch_b64/chunk_00 v15_patch_b64/chunk_01 v15_patch_b64/chunk_02 v15_patch_b64/chunk_03 v15_patch_b64/chunk_04; do base64 -d "$f" >> /tmp/v15.patch; done
+          for f in v15_patch_tail/part_*; do base64 -d "$f" >> /tmp/v15.patch; done
+          echo "e41aebbd50f43ce6eb8bf83de8c99bb192c7faeb0a769af065719f8fdc2c9c55  /tmp/v15.patch" | sha256sum -c -
+          (cd appsrc && patch -p0 < /tmp/v15.patch)
+
+          cat v16_final_gz_b64/chunk_* | base64 -d | gzip -d > /tmp/v16.patch
+          echo "20593d3e17b85c2a9b56e5f4d72479af11d93a3bea042fe941974ce301940966  /tmp/v16.patch" | sha256sum -c -
+          (cd appsrc && patch -p1 < /tmp/v16.patch)
+
+      - name: Apply v1.7 dashboard polish
+        shell: bash
+        run: |
+          cat v17_patch_gz_b64/chunk_* | base64 -d | gzip -d > /tmp/v17.patch
+          echo "8d866d95d13a6350d7c4cc4e0df0ba1d24400087d372a26c13cb9dddad0c08ee  /tmp/v17.patch" | sha256sum -c -
+          (cd appsrc && patch -p1 < /tmp/v17.patch)
+          node --check appsrc/app/src/main/assets/app.js
+          (cd appsrc && node tests/logic.cjs)
+          grep -q "versionName '1.7.0'" appsrc/app/build.gradle
+          grep -q "Latest from the newsroom" appsrc/app/src/main/assets/app.js
+          grep -q "headline-only" appsrc/app/src/main/assets/style.css
+          grep -q "reader-shell:before" appsrc/app/src/main/assets/style.css
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build non-debuggable release APK
+        working-directory: appsrc
+        shell: bash
+        run: gradle --no-daemon :app:assembleRelease --stacktrace
+
+      - name: Verify installable APK
+        shell: bash
+        run: |
+          cp appsrc/app/build/outputs/apk/release/app-release.apk CreedTimes-v1.7.apk
+          test -s CreedTimes-v1.7.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs CreedTimes-v1.7.apk
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging CreedTimes-v1.7.apk | head -30
+          sha256sum CreedTimes-v1.7.apk > CreedTimes-v1.7.apk.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CreedTimes-v1.7-APK
+          path: |
+            CreedTimes-v1.7.apk
+            CreedTimes-v1.7.apk.sha256
+          if-no-files-found: error
