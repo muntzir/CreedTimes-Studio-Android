@@ -1,0 +1,36 @@
+name: Probe v14 Feeds 2
+on:
+  push:
+    branches: [ creedtimes-news-v1-4 ]
+    paths: [ '.github/workflows/probe-v14-feeds2.yml' ]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve YouTube channel
+        shell: bash
+        run: |
+          mkdir -p probe
+          curl -LfsS --max-time 30 -A 'Mozilla/5.0' 'https://www.youtube.com/@creedtimes' -o probe/youtube.html
+          grep -oE '"channelId":"UC[^"]+"' probe/youtube.html | head -5 > probe/channel.txt || true
+          grep -oE '"externalId":"UC[^"]+"' probe/youtube.html | head -5 >> probe/channel.txt || true
+          cat probe/channel.txt
+      - name: Probe feed endpoints
+        shell: bash
+        run: |
+          {
+            for u in               'https://www.aljazeera.com/xml/rss/all.xml'               'https://www.independenturdu.com/rss.xml'               'https://www.presstv.ir/rss'               'https://news.google.com/rss/search?q=site%3Areuters.com&hl=en-US&gl=US&ceid=US%3Aen'               'https://news.google.com/rss/search?q=site%3Abbc.com%2Fnews&hl=en-GB&gl=GB&ceid=GB%3Aen'               'https://news.google.com/rss/search?q=site%3Abbc.com%2Furdu&hl=ur&gl=PK&ceid=PK%3Aur'               'https://news.google.com/rss/search?q=site%3Apresstv.ir&hl=en-US&gl=US&ceid=US%3Aen'; do
+              echo "URL=$u"
+              curl -L --max-time 20 -sS -o /tmp/feed -w 'HTTP=%{http_code} TYPE=%{content_type} SIZE=%{size_download}\n' "$u" || true
+              head -c 100 /tmp/feed | tr '\n' ' '; echo
+            done
+          } > probe/feeds.txt
+          cat probe/feeds.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v14-feed-probe-2
+          path: probe/
