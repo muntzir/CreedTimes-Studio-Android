@@ -1,0 +1,36 @@
+name: Export Creed Times v1.4 Source
+
+on:
+  push:
+    branches: [ creedtimes-news-v1-5 ]
+    paths:
+      - '.github/workflows/export-v14-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct source
+        shell: bash
+        run: |
+          cat news_v11_bundle/chunk_* > creedtimes-news-v1.1.b64
+          base64 -d creedtimes-news-v1.1.b64 > CreedTimes-News-v1.1-Source.zip
+          mkdir appsrc
+          unzip -q CreedTimes-News-v1.1-Source.zip -d appsrc
+          : > /tmp/v12.patch
+          for f in v12_patch_b64/chunk_*; do base64 -d "$f" >> /tmp/v12.patch; done
+          (cd appsrc && patch -p0 < /tmp/v12.patch)
+          sed -i 's/monogram\.png/monogram.webp/g' appsrc/app/src/main/assets/app.js
+          python3 v13_overrides/apply_v13.py appsrc
+          python3 v14_overrides/apply_v14.py appsrc
+          zip -qr CreedTimes-v1.4-Source.zip appsrc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CreedTimes-v1.4-Source
+          path: CreedTimes-v1.4-Source.zip
+          if-no-files-found: error
