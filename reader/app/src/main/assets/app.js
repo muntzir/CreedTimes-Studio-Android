@@ -9,7 +9,7 @@ const icon=n=>`<svg aria-hidden="true" viewBox="0 0 24 24"><path d="${paths[n]||
 function read(key,fallback){try{return JSON.parse(localStorage.getItem('ct.'+key))??fallback;}catch{return fallback;}}
 function write(key,value){try{localStorage.setItem('ct.'+key,JSON.stringify(value));return true;}catch{toast('Device storage is full. Remove some saved stories.');return false;}}
 let saved=read('saved',{}), favorites=read('favorites',{}), history=read('history',{}), prefs=read('prefs',{theme:'system',font:19,speed:1,lang:'auto'});
-let state={nav:'home',tab:'all',filter:null,search:'',page:1,posts:[],cats:[],tags:[],authors:[],loading:false,error:'',more:true,article:null,speaking:false,offline:false,sync:null};
+let state={nav:'home',tab:'all',filter:null,search:'',page:1,posts:[],cats:[],tags:[],authors:[],templates:[],loading:false,error:'',more:true,article:null,speaking:false,offline:false,sync:null};
 let pending={},requestID=0,epoch=0;
 window.nativeReply=(id,body,error)=>{const p=pending[id];if(!p)return;delete pending[id];clearTimeout(p.timer);if(error)p.reject(Error(error));else{try{p.resolve(JSON.parse(body));}catch{p.reject(Error('The website did not return valid article data.'));}}};
 async function api(route){
@@ -26,7 +26,7 @@ function minutes(p){return Math.max(1,Math.ceil(plain(p.content?.rendered).split
 function date(p){const d=new Date(p.date_gmt ? p.date_gmt+'Z' : p.date);return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
 function category(p){return plain(terms(p,'category')[0]?.name||'Story');}
 function title(p){return plain(p.title?.rendered||'Untitled');}
-function normalize(p){return {id:p.id,date:p.date,date_gmt:p.date_gmt,link:p.link,title:p.title,content:p.content,excerpt:p.excerpt,author:p.author,categories:p.categories,tags:p.tags,_embedded:p._embedded};}
+function normalize(p){return {id:p.id,date:p.date,date_gmt:p.date_gmt,link:p.link,title:p.title,content:p.content,excerpt:p.excerpt,author:p.author,categories:p.categories,tags:p.tags,post_template:p.post_template,format:p.format,meta:p.meta,acf:p.acf,_embedded:p._embedded};}
 function nav(){return `<nav class="bottom" aria-label="Main navigation">${[['home','home','Latest'],['explore','grid','Explore'],['saved','save','Library'],['settings','settings','Settings']].map(([id,i,label])=>`<button data-nav="${id}" class="${state.nav===id?'active':''}" ${state.nav===id?'aria-current="page"':''}>${icon(i)}${label}</button>`).join('')}</nav>`;}
 function header(){return `<header class="header"><div class="brand"><img src="monogram.png" alt="Creed Times monogram"><div><strong>CREED <span>TIMES</span></strong><small>Stay informed. Stay aware.</small></div></div><button class="icon" data-action="search" aria-label="Search stories">${icon('search')}</button></header>`;}
 function empty(heading,description,action=''){return `<div class="empty">${icon('grid')}<h2>${esc(heading)}</h2><p>${esc(description)}</p>${action}</div>`;}
@@ -58,26 +58,27 @@ function render(){applyTheme();if(state.article){renderReader();return;}
 function settings(){return `<main class="content"><div class="eyebrow">Make it yours</div><div class="section-heading"><h1>Reading, your way.</h1></div><div class="settings-card"><label class="row"><span>Appearance<small>Light, dark or device setting</small></span><select data-pref="theme">${options([['system','System'],['light','Light'],['dark','Dark']],prefs.theme)}</select></label><label class="row"><span>Text size<small>Comfortable reading</small></span><select data-pref="font">${options([[17,'Small'],[19,'Default'],[22,'Large'],[25,'Extra large']],prefs.font)}</select></label><label class="row"><span>Listening speed</span><select data-pref="speed">${options([[.75,'0.75×'],[1,'1×'],[1.25,'1.25×'],[1.5,'1.5×']],prefs.speed)}</select></label><label class="row"><span>Reading voice</span><select data-pref="lang">${options([['auto','Auto detect'],['en','English'],['ur','Urdu']],prefs.lang)}</select></label></div><h2>Let’s talk</h2><div class="settings-card"><a class="row" href="https://wa.me/923083829035"><span>Chat on WhatsApp<small>Questions, feedback & story tips</small></span>${icon('arrow')}</a><a class="row" href="mailto:info@creedtimes.com"><span>Email the newsroom<small>info@creedtimes.com</small></span>${icon('arrow')}</a><a class="row" href="https://creedtimes.com"><span>Visit CreedTimes.com</span>${icon('arrow')}</a></div><h2>Your data</h2><div class="notice">Bookmarks, favorites and reading history stay on this device. No account or advertising tracker is included. Reading a story loads website images; media playback connects to its provider. Text-to-speech uses your Android voice engine, which may require a network connection.</div><button class="secondary full" data-action="clear">Clear reading history & feed cache</button><p class="status">Creed Times • Version 1.1<br>Stay informed. Stay aware.</p></main>`;}
 function options(items,value){return items.map(([v,n])=>`<option value="${v}" ${String(value)===String(v)?'selected':''}>${n}</option>`).join('');}
 async function allTerms(type){let result=[];for(let page=1;;page++){const list=await api(`${type}?per_page=100&page=${page}`);if(!Array.isArray(list))throw Error('Invalid directory response');result.push(...list);if(list.length<100)return result;}}
-async function taxonomy(){const cached=read('taxonomy',null);if(cached){Object.assign(state,cached);render();}const results=await Promise.allSettled(['categories','tags','users'].map(allTerms));let fail=false;['cats','tags','authors'].forEach((key,i)=>{if(results[i].status==='fulfilled')state[key]=results[i].value;else fail=true;});state.taxError=fail;write('taxonomy',{cats:state.cats,tags:state.tags,authors:state.authors});render();if(state.tab!=='all'&&!state.article)load();}
+async function taxonomy(){const cached=read('taxonomy',null);if(cached){Object.assign(state,cached);render();}const results=await Promise.allSettled(['categories','tags','users','post_template'].map(allTerms));let fail=false;['cats','tags','authors','templates'].forEach((key,i)=>{if(results[i].status==='fulfilled')state[key]=results[i].value;else fail=true;});state.taxError=fail;write('taxonomy',{cats:state.cats,tags:state.tags,authors:state.authors,templates:state.templates});render();if(state.tab!=='all'&&!state.article)load();}
 const tabPatterns={
- video:/(^|[-\s])(video|videos|watch)([-\s]|$)|ویڈیو/i,
- audio:/(^|[-\s])(audio|podcast|podcasts)([-\s]|$)|پوڈکاسٹ|آڈیو/i,
- artworks:/(^|[-\s])(art|arts|artwork|artworks|gallery|illustration|illustrations)([-\s]|$)|آرٹ|فن پارے/i,
- articles:/(^|[-\s])(article|articles|essay|essays)([-\s]|$)|مضامین|مضمون/i
+ video:/(^|[-_\s])(video|videos|watch)([-_\s]|$)|ویڈیو/i,
+ audio:/(^|[-_\s])(audio|podcast|podcasts)([-_\s]|$)|پوڈکاسٹ|آڈیو/i,
+ artworks:/(^|[-_\s])(art|arts|artwork|artworks|gallery|illustration|illustrations)([-_\s]|$)|آرٹ|فن پارے/i,
+ articles:/(^|[-_\s])(article|articles|essay|essays)([-_\s]|$)|مضامین|مضمون/i
 };
-function matchingTerms(kind){const re=tabPatterns[kind];return {cats:state.cats.filter(x=>re.test(x.slug+' '+x.name)).map(x=>x.id),tags:state.tags.filter(x=>re.test(x.slug+' '+x.name)).map(x=>x.id)};}
+function matchingTerms(kind){const re=tabPatterns[kind];return {cats:state.cats.filter(x=>re.test(x.slug+' '+x.name)).map(x=>x.id),tags:state.tags.filter(x=>re.test(x.slug+' '+x.name)).map(x=>x.id),templates:state.templates.filter(x=>re.test(x.slug+' '+x.name)).map(x=>x.id)};}
 function query(){const q=new URLSearchParams({per_page:'20',page:String(state.page),_embed:'1',orderby:'date',order:'desc'});if(state.search)q.set('search',state.search);
  if(state.tab!=='all'){
-  const selected=matchingTerms(state.tab),cs=selected.cats,ts=selected.tags;
-  if(state.tab==='articles'&&!cs.length&&!ts.length){
+  const selected=matchingTerms(state.tab),cs=selected.cats,ts=selected.tags,ps=selected.templates;
+  if(state.tab==='articles'&&!cs.length&&!ts.length&&!ps.length){
    // Without an Articles taxonomy, written posts are those outside the media/art sections.
    const others=['video','audio','artworks'].map(matchingTerms);
    const excludedCats=[...new Set(others.flatMap(x=>x.cats))],excludedTags=[...new Set(others.flatMap(x=>x.tags))];
    if(excludedCats.length)q.set('categories_exclude',excludedCats.join(','));
    if(excludedTags.length)q.set('tags_exclude',excludedTags.join(','));
+   const excludedTemplates=[...new Set(others.flatMap(x=>x.templates))];if(excludedTemplates.length)q.set('post_template_exclude',excludedTemplates.join(','));
   }else{
-   if(!cs.length&&!ts.length)return null;
-   if(cs.length)q.set('categories',cs.join(','));if(ts.length)q.set('tags',ts.join(','));if(cs.length&&ts.length)q.set('tax_relation','OR');
+   if(!cs.length&&!ts.length&&!ps.length)return null;
+   if(cs.length)q.set('categories',cs.join(','));if(ts.length)q.set('tags',ts.join(','));if(ps.length)q.set('post_template',ps.join(','));if([cs,ts,ps].filter(x=>x.length).length>1)q.set('tax_relation','OR');
   }
  }
  if(state.filter)q.set(state.filter.type,String(state.filter.id));return 'posts?'+q.toString();
@@ -123,3 +124,6 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)stopSpeech(
 render();load();taxonomy();
 
 document.addEventListener('keydown',e=>{if(!e.target.matches('[role=tab]')||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const tabs=[...document.querySelectorAll('[role=tab]')],i=tabs.indexOf(e.target),next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[next].click();document.querySelector('[data-tab="'+tabs[next].dataset.tab+'"]')?.focus();});
+
+// Keep a failed remote image from breaking card layout.
+document.addEventListener('error',e=>{const img=e.target;if(img.tagName==='IMG'&&!img.src.endsWith('/monogram.png')){img.src='monogram.png';img.alt='Creed Times';img.style.objectFit='contain';img.style.background='#fff';}},true);

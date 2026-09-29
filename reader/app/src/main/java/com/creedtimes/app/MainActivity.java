@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
     }
     public class Bridge {
         @JavascriptInterface public void request(String id, String route) {
-            if (!id.matches("[0-9]+") || !route.matches("(posts|categories|tags|users)(\\?[a-zA-Z0-9_=&%.*,+\\-]*)?")) return;
+            if (!id.matches("[0-9]+") || !route.matches("(posts|categories|tags|users|post_template)(\\?[a-zA-Z0-9_=&%.*,+\\-]*)?")) return;
             pool.execute(() -> {
                 HttpURLConnection c = null;
                 try {

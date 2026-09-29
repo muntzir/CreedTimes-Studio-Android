@@ -51,6 +51,9 @@ jobs:
       - name: Verify mobile interface
         working-directory: reader
         run: node tests/ui.cjs
+      - name: Verify live website tab feeds
+        working-directory: reader
+        run: node tests/live.cjs
       - name: Inspect public website API
         if: always()
         working-directory: reader

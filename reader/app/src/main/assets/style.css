@@ -6,3 +6,5 @@
 .top-tabs button.active{color:var(--ink);font-weight:800;border-color:var(--orange)}
 .bottom{padding-top:12px}.bottom button{gap:6px;letter-spacing:.2px;font-size:11px;font-weight:600}.bottom svg{width:21px;height:21px;stroke-width:1.5}.bottom .active{color:var(--ink)}.bottom .active svg{color:var(--orange)}
 .art-gallery{display:grid;grid-template-columns:1fr 1fr;gap:14px}.art-card{padding:0;text-align:start;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface);align-self:start}.art-card img{width:100%;aspect-ratio:4/5;display:block;object-fit:cover}.art-caption{padding:14px}.art-caption h3{font-size:15px;margin:8px 0}.art-caption small{font-size:11px;color:var(--muted)}.art-fallback{aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#082d4b,#124c75);color:#f89456;font-size:15px;letter-spacing:3px}.top-tabs:has(button:focus-visible){scroll-behavior:auto}
+
+.top-tabs{gap:17px;padding-inline:16px}.top-tabs button{font-size:12px}
