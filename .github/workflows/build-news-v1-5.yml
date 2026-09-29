@@ -37,7 +37,9 @@ jobs:
         shell: bash
         run: |
           : > /tmp/v15.patch
-          for f in v15_patch_b64/chunk_*; do base64 -d "$f" >> /tmp/v15.patch; done
+          for f in v15_patch_b64/chunk_00 v15_patch_b64/chunk_01 v15_patch_b64/chunk_02 v15_patch_b64/chunk_03 v15_patch_b64/chunk_04; do base64 -d "$f" >> /tmp/v15.patch; done
+          for f in v15_patch_tail/part_*; do base64 -d "$f" >> /tmp/v15.patch; done
+          echo "f344bb31b28538ad1d064599550245034145b22cfdab77c32c9d4fe604513206  /tmp/v15.patch" | sha256sum -c -
           (cd appsrc && patch -p0 < /tmp/v15.patch)
           node --check appsrc/app/src/main/assets/app.js
           (cd appsrc && node tests/logic.cjs)
