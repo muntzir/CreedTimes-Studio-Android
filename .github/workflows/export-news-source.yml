@@ -1,0 +1,28 @@
+name: Export Creed Times News Source
+
+on:
+  push:
+    branches: [ creedtimes-news-v1-2 ]
+    paths:
+      - '.github/workflows/export-news-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct source
+        shell: bash
+        run: |
+          cat news_v11_bundle/chunk_* > creedtimes-news-v1.1.b64
+          base64 -d creedtimes-news-v1.1.b64 > CreedTimes-News-v1.1-Source.zip
+          unzip -t CreedTimes-News-v1.1-Source.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CreedTimes-News-v1.1-Source
+          path: CreedTimes-News-v1.1-Source.zip
+          if-no-files-found: error
