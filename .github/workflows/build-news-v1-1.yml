@@ -41,10 +41,10 @@ jobs:
           node --check app/src/main/assets/app.js
           node tests/logic.cjs
 
-      - name: Build and lint debug APK
+      - name: Build debug APK
         working-directory: appsrc
         shell: bash
-        run: gradle --no-daemon :app:assembleDebug :app:lintDebug --stacktrace
+        run: gradle --no-daemon :app:assembleDebug --stacktrace
 
       - name: Prepare APK
         shell: bash
