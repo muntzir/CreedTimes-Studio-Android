@@ -1,0 +1,58 @@
+name: Probe Creed Times External Feeds
+
+on:
+  push:
+    branches: [ creedtimes-news-v1-4 ]
+    paths:
+      - '.github/workflows/probe-v14-feeds.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe YouTube and RSS sources
+        shell: bash
+        run: |
+          set -u
+          mkdir -p probe
+          curl -LfsS --max-time 30 -A 'Mozilla/5.0' 'https://www.youtube.com/@creedtimes' -o probe/youtube.html || true
+          python3 - <<'PY' > probe/report.txt
+import re, pathlib, urllib.request
+html=pathlib.Path('probe/youtube.html').read_text(errors='ignore') if pathlib.Path('probe/youtube.html').exists() else ''
+ids=[]
+for pat in [r'"channelId":"(UC[^"]+)"', r'"externalId":"(UC[^"]+)"', r'youtube.com/channel/(UC[w-]+)']:
+    ids += re.findall(pat, html)
+ids=list(dict.fromkeys(ids))
+print('YOUTUBE_CHANNEL_IDS', ids[:5])
+urls=[
+('aljazeera','https://www.aljazeera.com/xml/rss/all.xml'),
+('presstv','https://www.presstv.ir/rss'),
+('independenturdu_rss','https://www.independenturdu.com/rss.xml'),
+('independenturdu_feed','https://www.independenturdu.com/feed'),
+('reuters_google','https://news.google.com/rss/search?q=site%3Areuters.com&hl=en-US&gl=US&ceid=US%3Aen'),
+('bbc_google','https://news.google.com/rss/search?q=site%3Abbc.com%2Fnews&hl=en-GB&gl=GB&ceid=GB%3Aen'),
+('bbc_urdu_google','https://news.google.com/rss/search?q=site%3Abbc.com%2Furdu&hl=ur&gl=PK&ceid=PK%3Aur'),
+('independent_urdu_google','https://news.google.com/rss/search?q=site%3Aindependenturdu.com&hl=ur&gl=PK&ceid=PK%3Aur'),
+('presstv_google','https://news.google.com/rss/search?q=site%3Apresstv.ir&hl=en-US&gl=US&ceid=US%3Aen')
+]
+if ids:
+    urls.append(('youtube_rss',f'https://www.youtube.com/feeds/videos.xml?channel_id={ids[0]}'))
+for name,url in urls:
+    req=urllib.request.Request(url,headers={'User-Agent':'CreedTimesAndroid/1.4'})
+    try:
+        with urllib.request.urlopen(req,timeout=20) as r:
+            body=r.read(400)
+            print(name, r.status, r.headers.get('content-type'), len(body), body[:80])
+    except Exception as e:
+        print(name,'ERROR',repr(e))
+PY
+          cat probe/report.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CreedTimes-v1.4-feed-probe
+          path: probe/report.txt
