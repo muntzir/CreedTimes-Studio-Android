@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CT_THEME_VERSION', '2.2.0' );
+define( 'CT_THEME_VERSION', '2.3.0' );
 define( 'CT_THEME_DIR', get_template_directory() );
 define( 'CT_THEME_URI', get_template_directory_uri() );
 
@@ -56,7 +56,7 @@ add_action( 'after_setup_theme', 'ct_theme_setup' );
 function ct_theme_assets() {
 	wp_enqueue_style(
 		'ct-fonts',
-		'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap',
 		array(),
 		null
 	);
@@ -200,3 +200,37 @@ function ct_theme_image_quality() {
 }
 add_filter( 'jpeg_quality', 'ct_theme_image_quality' );
 add_filter( 'wp_editor_set_quality', 'ct_theme_image_quality' );
+
+
+/**
+ * Normalize legacy posts that contain an entire standalone HTML document.
+ * The new theme owns page chrome and typography; old <head>/<style>/<script>
+ * blocks should never override the newsroom UI.
+ */
+function ct_theme_normalize_legacy_article_html( $content ) {
+	if ( is_admin() || ! is_singular( 'post' ) ) {
+		return $content;
+	}
+	if ( false === stripos( $content, '<!doctype' ) && false === stripos( $content, '<html' ) ) {
+		return $content;
+	}
+
+	if ( preg_match( '#<body[^>]*>(.*)</body>#is', $content, $match ) ) {
+		$content = $match[1];
+	}
+	$content = preg_replace( '#<(?:head|style|script)[^>]*>.*?</(?:head|style|script)>#is', '', $content );
+	$content = preg_replace( '#</?(?:html|body|meta|link)[^>]*>#i', '', $content );
+	return $content;
+}
+add_filter( 'the_content', 'ct_theme_normalize_legacy_article_html', 8 );
+
+/**
+ * Prefer large responsive image sources in editorial cards and archives.
+ */
+function ct_theme_attachment_image_attributes( $attr ) {
+	if ( isset( $attr['loading'] ) && 'lazy' === $attr['loading'] ) {
+		$attr['decoding'] = 'async';
+	}
+	return $attr;
+}
+add_filter( 'wp_get_attachment_image_attributes', 'ct_theme_attachment_image_attributes' );
