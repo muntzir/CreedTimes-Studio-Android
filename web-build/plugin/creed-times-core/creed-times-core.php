@@ -3,7 +3,7 @@
  * Plugin Name: Creed Times Core
  * Plugin URI: https://creedtimes.com/
  * Description: Editorial content types, taxonomy cleanup, Creed Pro access, bookmarks, notes, follows and profile tools for Creed Times.
- * Version: 2.0.0
+ * Version: 2.2.0
  * Author: Creed Times
  * Requires at least: 6.6
  * Requires PHP: 8.0
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CT_CORE_VERSION', '2.0.0' );
+define( 'CT_CORE_VERSION', '2.2.0' );
 define( 'CT_CORE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CT_CORE_URI', plugin_dir_url( __FILE__ ) );
 
@@ -70,3 +70,57 @@ function ct_core_deactivate() {
 	flush_rewrite_rules();
 }
 register_deactivation_hook( __FILE__, 'ct_core_deactivate' );
+
+
+/**
+ * One-time upgrade routine for routes, default pages and optional brand asset discovery.
+ */
+function ct_core_maybe_upgrade() {
+	if ( get_option( 'ct_core_schema_version' ) === CT_CORE_VERSION ) {
+		return;
+	}
+
+	ct_core_register_content_types();
+	ct_core_seed_terms();
+
+	$pages = array(
+		'profile'   => 'Profile',
+		'creed-pro' => 'Creed Pro',
+		'authors'   => 'Authors',
+	);
+	foreach ( $pages as $slug => $title ) {
+		if ( ! get_page_by_path( $slug ) ) {
+			wp_insert_post( array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+				'post_title'  => $title,
+				'post_name'   => $slug,
+			) );
+		}
+	}
+
+	// Use exact Creed Times brand uploads automatically if they already exist in Media Library.
+	$logo_candidates = get_posts( array(
+		'post_type'      => 'attachment',
+		'post_status'    => 'inherit',
+		'posts_per_page' => 20,
+		's'              => 'Creed Times',
+	) );
+	foreach ( $logo_candidates as $attachment ) {
+		$title = strtolower( $attachment->post_title );
+		if ( false !== strpos( $title, 'geometric news logo' ) || false !== strpos( $title, 'creed times logo' ) ) {
+			if ( ! get_theme_mod( 'custom_logo' ) ) {
+				set_theme_mod( 'custom_logo', $attachment->ID );
+			}
+		}
+		if ( false !== strpos( $title, 'monogram' ) ) {
+			if ( ! has_site_icon() ) {
+				update_option( 'site_icon', $attachment->ID );
+			}
+		}
+	}
+
+	flush_rewrite_rules( false );
+	update_option( 'ct_core_schema_version', CT_CORE_VERSION );
+}
+add_action( 'init', 'ct_core_maybe_upgrade', 98 );
