@@ -67,7 +67,7 @@ $urdu_q = new WP_Query( array(
 <main class="ct-home">
 	<section class="ct-home-top">
 		<div class="ct-container ct-home-top__grid">
-			<?php if ( $hero ) : setup_postdata( $hero ); ?>
+			<?php if ( $hero ) : $post = $hero; setup_postdata( $post ); ?>
 				<article class="ct-hero-story">
 					<a class="ct-hero-story__media" href="<?php the_permalink(); ?>">
 						<?php if ( has_post_thumbnail() ) : the_post_thumbnail( 'ct-hero', array( 'fetchpriority' => 'high', 'decoding' => 'async' ) ); else : ?><div class="ct-media-fallback"><span>CT</span></div><?php endif; ?>
