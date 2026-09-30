@@ -3,7 +3,7 @@
  * Plugin Name: Creed Times Core
  * Plugin URI: https://creedtimes.com/
  * Description: Editorial content types, taxonomy cleanup, Creed Pro access, bookmarks, notes, follows and profile tools for Creed Times.
- * Version: 2.3.0
+ * Version: 2.3.1
  * Author: Creed Times
  * Requires at least: 6.6
  * Requires PHP: 8.0
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CT_CORE_VERSION', '2.3.0' );
+define( 'CT_CORE_VERSION', '2.3.1' );
 define( 'CT_CORE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CT_CORE_URI', plugin_dir_url( __FILE__ ) );
 
@@ -47,13 +47,11 @@ function ct_core_assets() {
 add_action( 'wp_enqueue_scripts', 'ct_core_assets' );
 
 function ct_core_activate() {
+	// Keep activation deliberately minimal so third-party plugins cannot break
+	// the WordPress activation sandbox while Creed Times is being enabled.
 	ct_core_register_content_types();
 	ct_core_seed_terms();
-
-	ct_core_ensure_required_pages();
-	if ( ! wp_next_scheduled( 'ct_core_youtube_sync_event' ) ) {
-		wp_schedule_event( time() + 300, 'hourly', 'ct_core_youtube_sync_event' );
-	}
+	update_option( 'ct_core_pending_setup', '1' );
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'ct_core_activate' );
@@ -73,33 +71,29 @@ register_deactivation_hook( __FILE__, 'ct_core_deactivate' );
 
 
 /**
- * One-time upgrade routine for routes, default pages and optional brand asset discovery.
+ * Deferred setup runs only after the plugin has activated successfully.
+ * No taxonomy migration is run automatically; the editor can review it first.
  */
-function ct_core_maybe_upgrade() {
-	if ( get_option( 'ct_core_schema_version' ) === CT_CORE_VERSION ) {
+function ct_core_deferred_setup() {
+	if ( '1' !== get_option( 'ct_core_pending_setup' ) && get_option( 'ct_core_schema_version' ) === CT_CORE_VERSION ) {
 		return;
 	}
 
-	ct_core_register_content_types();
-	ct_core_seed_terms();
-
-	ct_core_ensure_required_pages();
-
-	// Run the non-destructive editorial normalization once for this plugin version.
-	if ( get_option( 'ct_core_migration_version' ) !== CT_CORE_VERSION ) {
-		ct_core_run_safe_migration();
-		update_option( 'ct_core_migration_version', CT_CORE_VERSION );
+	if ( function_exists( 'ct_core_register_content_types' ) ) {
+		ct_core_register_content_types();
+	}
+	if ( function_exists( 'ct_core_seed_terms' ) ) {
+		ct_core_seed_terms();
+	}
+	if ( function_exists( 'ct_core_ensure_required_pages' ) ) {
+		ct_core_ensure_required_pages();
 	}
 
-	// Queue an initial YouTube import shortly after the upgrade without blocking page load.
 	if ( ! wp_next_scheduled( 'ct_core_youtube_sync_event' ) ) {
 		wp_schedule_event( time() + 300, 'hourly', 'ct_core_youtube_sync_event' );
 	}
-	if ( ! wp_next_scheduled( 'ct_core_youtube_initial_sync_event' ) ) {
-		wp_schedule_single_event( time() + 60, 'ct_core_youtube_initial_sync_event' );
-	}
 
-	// Use exact Creed Times brand uploads automatically if they already exist in Media Library.
+	// Detect exact brand assets only if they already exist in WordPress Media.
 	$logo_candidates = get_posts( array(
 		'post_type'      => 'attachment',
 		'post_status'    => 'inherit',
@@ -107,23 +101,28 @@ function ct_core_maybe_upgrade() {
 		's'              => 'Creed Times',
 	) );
 	foreach ( $logo_candidates as $attachment ) {
-		$title = strtolower( $attachment->post_title );
+		$title = strtolower( (string) $attachment->post_title );
 		if ( false !== strpos( $title, 'geometric news logo' ) || false !== strpos( $title, 'creed times logo' ) ) {
 			if ( ! get_theme_mod( 'custom_logo' ) ) {
 				set_theme_mod( 'custom_logo', $attachment->ID );
 			}
 		}
-		if ( false !== strpos( $title, 'monogram' ) ) {
-			if ( ! has_site_icon() ) {
-				update_option( 'site_icon', $attachment->ID );
-			}
+		if ( false !== strpos( $title, 'monogram' ) && ! has_site_icon() ) {
+			update_option( 'site_icon', $attachment->ID );
 		}
 	}
 
-	flush_rewrite_rules( false );
+	delete_option( 'ct_core_pending_setup' );
 	update_option( 'ct_core_schema_version', CT_CORE_VERSION );
 }
-add_action( 'init', 'ct_core_maybe_upgrade', 98 );
+add_action( 'admin_init', 'ct_core_deferred_setup', 20 );
+
+function ct_core_activation_notice() {
+	if ( get_option( 'ct_core_schema_version' ) !== CT_CORE_VERSION && '1' === get_option( 'ct_core_pending_setup' ) ) {
+		echo '<div class="notice notice-info"><p><strong>Creed Times Core:</strong> activation succeeded. Finishing safe newsroom setup now…</p></div>';
+	}
+}
+add_action( 'admin_notices', 'ct_core_activation_notice' );
 
 
 function ct_core_initial_youtube_sync() {
