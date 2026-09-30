@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 96" role="img" aria-labelledby="title desc">
+<title id="title">Creed Times</title>
+<desc id="desc">Creed Times blue and orange wordmark</desc>
+<rect width="420" height="96" rx="18" fill="none"/>
+<g transform="translate(4 10)">
+  <g transform="translate(0 4)">
+    <path d="M36 6C17 6 5 18 5 37s12 31 31 31c10 0 18-3 25-9l-9-11c-4 4-9 6-15 6-10 0-17-7-17-17s7-17 17-17c6 0 11 2 15 6l9-11C54 9 46 6 36 6Z" fill="#0B2A4A"/>
+    <path d="M44 10h32v14H65v44H50V24H44V10Z" fill="#FF6B3D"/>
+  </g>
+  <g transform="translate(88 4)">
+    <text x="0" y="36" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800" letter-spacing="-1.8" fill="#0B2A4A">CREED</text>
+    <text x="115" y="36" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800" letter-spacing="-1.8" fill="#FF6B3D">TIMES</text>
+    <text x="2" y="58" font-family="Arial, Helvetica, sans-serif" font-size="8.5" font-weight="700" letter-spacing="2.1" fill="#6D7984">NEWS · ANALYSIS · PERSPECTIVE</text>
+  </g>
+</g>
+</svg>
