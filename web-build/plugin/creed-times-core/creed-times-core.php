@@ -3,7 +3,7 @@
  * Plugin Name: Creed Times Core
  * Plugin URI: https://creedtimes.com/
  * Description: Editorial content types, taxonomy cleanup, Creed Pro access, bookmarks, notes, follows and profile tools for Creed Times.
- * Version: 2.2.0
+ * Version: 2.3.0
  * Author: Creed Times
  * Requires at least: 6.6
  * Requires PHP: 8.0
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CT_CORE_VERSION', '2.2.0' );
+define( 'CT_CORE_VERSION', '2.3.0' );
 define( 'CT_CORE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CT_CORE_URI', plugin_dir_url( __FILE__ ) );
 
@@ -25,6 +25,9 @@ require_once CT_CORE_DIR . 'includes/user-tools.php';
 require_once CT_CORE_DIR . 'includes/migration.php';
 require_once CT_CORE_DIR . 'includes/admin.php';
 require_once CT_CORE_DIR . 'includes/login-branding.php';
+require_once CT_CORE_DIR . 'includes/pages.php';
+require_once CT_CORE_DIR . 'includes/contact-forms.php';
+require_once CT_CORE_DIR . 'includes/youtube-sync.php';
 
 function ct_core_assets() {
 	wp_enqueue_script(
@@ -47,26 +50,19 @@ function ct_core_activate() {
 	ct_core_register_content_types();
 	ct_core_seed_terms();
 
-	$pages = array(
-		'profile'   => 'Profile',
-		'creed-pro' => 'Creed Pro',
-		'authors'   => 'Authors',
-	);
-	foreach ( $pages as $slug => $title ) {
-		if ( ! get_page_by_path( $slug ) ) {
-			wp_insert_post( array(
-				'post_type'   => 'page',
-				'post_status' => 'publish',
-				'post_title'  => $title,
-				'post_name'   => $slug,
-			) );
-		}
+	ct_core_ensure_required_pages();
+	if ( ! wp_next_scheduled( 'ct_core_youtube_sync_event' ) ) {
+		wp_schedule_event( time() + 300, 'hourly', 'ct_core_youtube_sync_event' );
 	}
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'ct_core_activate' );
 
 function ct_core_deactivate() {
+	$timestamp = wp_next_scheduled( 'ct_core_youtube_sync_event' );
+	if ( $timestamp ) {
+		wp_unschedule_event( $timestamp, 'ct_core_youtube_sync_event' );
+	}
 	flush_rewrite_rules();
 }
 register_deactivation_hook( __FILE__, 'ct_core_deactivate' );
@@ -83,21 +79,7 @@ function ct_core_maybe_upgrade() {
 	ct_core_register_content_types();
 	ct_core_seed_terms();
 
-	$pages = array(
-		'profile'   => 'Profile',
-		'creed-pro' => 'Creed Pro',
-		'authors'   => 'Authors',
-	);
-	foreach ( $pages as $slug => $title ) {
-		if ( ! get_page_by_path( $slug ) ) {
-			wp_insert_post( array(
-				'post_type'   => 'page',
-				'post_status' => 'publish',
-				'post_title'  => $title,
-				'post_name'   => $slug,
-			) );
-		}
-	}
+	ct_core_ensure_required_pages();
 
 	// Use exact Creed Times brand uploads automatically if they already exist in Media Library.
 	$logo_candidates = get_posts( array(
