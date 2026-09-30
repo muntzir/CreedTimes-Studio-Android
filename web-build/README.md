@@ -1,31 +1,87 @@
-# Creed Times 2.0
+# Creed Times 2.0 — WordPress Rebuild
 
-Custom WordPress rebuild package for Creed Times.
+This build is based on the Creed Times 2.0 master brief and the WordPress/WXR structure supplied for creedtimes.com.
 
-## Included
-- theme/creed-times-2/ — modern editorial WordPress theme
-- plugin/creed-times-core/ — editorial content system, migration, Pro access and user tools
-- preview/CreedTimes-2.0-Preview.html — standalone homepage UI preview
-- INSTALL.txt — manual installation steps
+## Packages
+- **Theme:** `creed-times-2`
+- **Core plugin:** `creed-times-core`
+- **HTML previews:** Homepage, Article, Profile
 
-## Design
-- Blue + Orange Creed Times identity
-- modern card-based homepage
-- premium sticky header
-- WhatsApp Channel + Group
-- Trending Now
-- The Spike
-- Latest Stories
-- Featured Video
+## Theme includes
+- Brand-new responsive homepage
+- Modern sticky header with search, social links and WhatsApp
+- Blue + orange Creed Times design system
+- Light / dark mode
+- Homepage hero + Trending Now
+- The Spike horizontal story section
+- Latest Stories cards
+- Featured Video panel
 - Authors & Contributors
-- Analysis / In Focus / Urdu Desk / Podcasts
-- Creed Pro
-- light/dark mode
-- mobile bottom navigation
-- responsive post, author, search, profile and membership pages
+- In Focus / Analysis / Urdu Desk / Podcasts
+- Creed Pro CTA
+- Article reading layout with breadcrumbs, reading time, reading progress, share, save, audio, Key Points, Sources, author box, related stories and comments
+- Author profile pages
+- Search with filters
+- User profile template
+- Creed Pro page
+- Video / Shorts / Podcast archives
+- Mobile bottom navigation
 
-## Migration
-The migration is non-destructive. It preserves existing URLs and content while mapping the legacy Creed Times WordPress structure into cleaner editorial taxonomies.
+## Creed Times Core includes
+- Videos, Shorts, Podcasts and Visual Stories
+- Language / Editorial Format / Region / Topic taxonomies
+- Free / Creed Pro access
+- Editor's Pick / Trending / Developing Story
+- Audio / Video / Show / Duration fields
+- Key Points and Sources
+- Bookmarks / Save for Later
+- Private Notes
+- Reading History
+- Follow Authors
+- Member Dashboard
+- Paid Memberships Pro integration
+- Modern WordPress login branding
+- Safe taxonomy migration tool
 
-## Official logo
-The theme uses WordPress Custom Logo and Site Icon. Use the official Creed Times logo and monogram supplied for the project. No imitation logo is bundled.
+## Safe migration
+The migration tool is deliberately non-destructive.
+
+It does **not delete** existing posts, pages, authors, images, media, original categories, original tags, publish dates, slugs or URLs.
+
+Current legacy mapping:
+- Urdu → Language: Urdu
+- Roman Urdu → Language: Urdu + Roman Urdu metadata
+- West Asia → Region: West Asia
+- World → Region: World
+- News → Format: News
+- Analysis → Format: Analysis
+- Documentaries → Format: Documentary
+- Politics → Topic: Pakistan Politics
+- Religion → Topic: Religion & Society
+- Art → Topic: Media
+- For Subscribers → Creed Pro, when the legacy taxonomy exists
+
+Obvious Glossier/demo tags such as beauty/vogue/tips/style are marked as legacy and hidden by the new front-end instead of being permanently deleted.
+
+## Installation order
+1. Take a fresh Hostinger full backup.
+2. Plugins → Add New → Upload Plugin → upload `creed-times-core-2.0.0.zip`.
+3. Activate it.
+4. WordPress → Creed Times → run **Safe Creed Times Migration**.
+5. If Paid Memberships Pro is being used, add the Creed Pro PMPro level ID in Creed Times settings.
+6. Appearance → Themes → Add New → Upload Theme → upload `creed-times-2.0.0.zip`.
+7. Activate the theme.
+8. Set the official Blue + Orange Creed Times logo under Site Identity.
+9. Set the official CT monogram as the WordPress Site Icon / favicon.
+10. Confirm the Primary Navigation menu.
+11. Check homepage, article, author, profile, search and Urdu pages.
+12. Clear LiteSpeed Cache.
+
+## Logo note
+The theme intentionally does not redraw your logo. WordPress uses the official logo uploaded under Site Identity, which avoids replacing your real mark with an approximation.
+
+## Existing content preservation
+The theme and plugin render existing WordPress content dynamically. The migration enriches existing content with new editorial taxonomies rather than rebuilding the database from scratch.
+
+## Preview
+Open the HTML files inside `web-build/preview/` before activation to review the visual direction.
