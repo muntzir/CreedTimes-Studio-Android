@@ -42,7 +42,7 @@ $ct_social = ct_get_social_links();
 			</button>
 			<a class="ct-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 				<?php if ( has_custom_logo() ) : ?>
-					<?php the_custom_logo(); ?>
+					<?php echo wp_get_attachment_image( get_theme_mod( 'custom_logo' ), 'full', false, array( 'class' => 'custom-logo', 'alt' => get_bloginfo( 'name' ) ) ); ?>
 				<?php else : ?>
 					<span class="ct-brand__text"><strong>CREED</strong><em>TIMES</em><small>NEWS · ANALYSIS · PERSPECTIVE</small></span>
 				<?php endif; ?>
