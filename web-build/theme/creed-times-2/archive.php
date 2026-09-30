@@ -55,7 +55,7 @@ $remaining = array_slice( $archive_posts, 1 );
 				<a href="<?php echo esc_url( ct_section_url( 'pakistan' ) ); ?>">Pakistan</a>
 				<a href="<?php echo esc_url( ct_section_url( 'world' ) ); ?>">World</a>
 				<a href="<?php echo esc_url( ct_section_url( 'analysis' ) ); ?>">Analysis</a>
-				<a href="<?php echo esc_url( ct_section_url( 'urdu' ) ); ?>" lang="ur">اردو</a>
+				<?php if ( ct_has_urdu_content() ) : ?><a href="<?php echo esc_url( ct_section_url( 'urdu' ) ); ?>" lang="ur">اردو</a><?php endif; ?>
 			</div>
 		</div>
 	</section>
