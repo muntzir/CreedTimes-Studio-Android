@@ -52,7 +52,6 @@ while ( have_posts() ) :
 
 				<div class="ct-article-actions">
 					<?php if ( shortcode_exists( 'ct_save_button' ) ) : echo do_shortcode( '[ct_save_button]' ); endif; ?>
-					<button class="ct-action-btn" type="button" data-share-toggle><?php echo ct_icon( 'share' ); ?> <span>Share</span></button>
 					<div class="ct-share-menu">
 						<button class="ct-action-btn" type="button" data-share-toggle><?php echo ct_icon( 'share' ); ?> <span>Share</span></button>
 						<div class="ct-share-menu__panel" data-share-menu hidden>
@@ -72,7 +71,19 @@ while ( have_posts() ) :
 		if ( $video_url ) :
 			$embed = wp_oembed_get( $video_url );
 		?>
-			<div class="ct-container ct-article-video"><?php echo $embed ? wp_kses_post( $embed ) : '<a href="' . esc_url( $video_url ) . '" target="_blank" rel="noopener">Watch video ↗</a>'; ?></div>
+			<div class="ct-container ct-article-video"><?php
+				if ( $embed ) {
+					echo wp_kses( $embed, array(
+						'iframe' => array(
+							'src' => true, 'width' => true, 'height' => true, 'frameborder' => true,
+							'allow' => true, 'allowfullscreen' => true, 'title' => true, 'loading' => true,
+							'referrerpolicy' => true,
+						),
+					) );
+				} else {
+					echo '<a href="' . esc_url( $video_url ) . '" target="_blank" rel="noopener">Watch video ↗</a>';
+				}
+			?></div>
 		<?php endif; ?>
 
 		<?php if ( has_post_thumbnail() && ! $video_url ) : ?>
