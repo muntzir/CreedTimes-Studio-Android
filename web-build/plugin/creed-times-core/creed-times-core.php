@@ -3,7 +3,7 @@
  * Plugin Name: Creed Times Core
  * Plugin URI: https://creedtimes.com/
  * Description: Editorial content types, taxonomy cleanup, Creed Pro access, bookmarks, notes, follows and profile tools for Creed Times.
- * Version: 2.3.1
+ * Version: 2.3.2
  * Author: Creed Times
  * Requires at least: 6.6
  * Requires PHP: 8.0
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CT_CORE_VERSION', '2.3.1' );
+define( 'CT_CORE_VERSION', '2.3.2' );
 define( 'CT_CORE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CT_CORE_URI', plugin_dir_url( __FILE__ ) );
 
