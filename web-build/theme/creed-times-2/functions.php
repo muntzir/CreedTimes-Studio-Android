@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CT_THEME_VERSION', '2.0.0' );
+define( 'CT_THEME_VERSION', '2.1.0' );
 define( 'CT_THEME_DIR', get_template_directory() );
 define( 'CT_THEME_URI', get_template_directory_uri() );
 
