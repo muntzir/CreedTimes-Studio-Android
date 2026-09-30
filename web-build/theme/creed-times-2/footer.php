@@ -23,7 +23,7 @@ $ct_social = ct_get_social_links();
 	<div class="ct-container">
 		<div class="ct-footer__top">
 			<a class="ct-footer-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<?php if ( has_custom_logo() ) : the_custom_logo(); else : ?><span><strong>CREED</strong> <em>TIMES</em></span><?php endif; ?>
+				<?php if ( has_custom_logo() ) : echo wp_get_attachment_image( get_theme_mod( 'custom_logo' ), 'full', false, array( 'class' => 'custom-logo', 'alt' => get_bloginfo( 'name' ) ) ); else : ?><span><strong>CREED</strong> <em>TIMES</em></span><?php endif; ?>
 			</a>
 			<p>News · Analysis · Perspective</p>
 		</div>
