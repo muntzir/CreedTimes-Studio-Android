@@ -77,9 +77,9 @@ $ct_social = ct_get_social_links();
 					<ul class="ct-primary-menu">
 						<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a></li>
 						<li><a href="<?php echo esc_url( home_url( '/category/news/' ) ); ?>">Latest</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/category/west-asia/' ) ); ?>">West Asia</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/category/pakistan/' ) ); ?>">Pakistan</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/category/world/' ) ); ?>">World</a></li>
+						<li><a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'west-asia', '/category/west_asia/' ) ); ?>">West Asia</a></li>
+						<li><a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'pakistan', '/region/pakistan/' ) ); ?>">Pakistan</a></li>
+						<li><a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'world', '/category/world/' ) ); ?>">World</a></li>
 						<li><a href="<?php echo esc_url( home_url( '/category/analysis/' ) ); ?>">Analysis</a></li>
 						<li><a href="<?php echo esc_url( home_url( '/category/urdu/' ) ); ?>" lang="ur">Urdu</a></li>
 						<?php if ( post_type_exists( 'ct_video' ) ) : ?><li><a href="<?php echo esc_url( get_post_type_archive_link( 'ct_video' ) ); ?>">Videos</a></li><?php endif; ?>
@@ -103,8 +103,8 @@ $ct_social = ct_get_social_links();
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
 				<a href="<?php echo esc_url( home_url( '/category/news/' ) ); ?>">Latest</a>
 				<a href="<?php echo esc_url( home_url( '/category/analysis/' ) ); ?>">Analysis</a>
-				<a href="<?php echo esc_url( home_url( '/category/west-asia/' ) ); ?>">West Asia</a>
-				<a href="<?php echo esc_url( home_url( '/category/world/' ) ); ?>">World</a>
+				<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'west-asia', '/category/west_asia/' ) ); ?>">West Asia</a>
+				<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'world', '/category/world/' ) ); ?>">World</a>
 				<a href="<?php echo esc_url( home_url( '/category/urdu/' ) ); ?>" lang="ur">اردو</a>
 			</nav>
 			<div class="ct-mobile-panel__social">
