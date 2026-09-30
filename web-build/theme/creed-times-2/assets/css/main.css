@@ -525,3 +525,10 @@ html[data-theme="dark"] .ct-theme-icon--moon{display:none}
 	.ct-author-directory-card__avatar{width:80px;height:80px;border-radius:16px}
 	.ct-dashboard-authors{grid-template-columns:1fr}
 }
+
+
+.ct-article-video{margin-bottom:42px}
+.ct-article-video iframe,.ct-article-video video{display:block;width:100%;aspect-ratio:16/9;height:auto;border:0;border-radius:26px;background:#000}
+.ct-page__inner{max-width:900px!important}
+.ct-page__header h1{font-size:clamp(2.8rem,5vw,5rem);line-height:.92;letter-spacing:-.055em;margin:0 0 30px}
+@media(max-width:650px){.ct-article-video{width:100%!important}.ct-article-video iframe,.ct-article-video video{border-radius:0}}
