@@ -55,6 +55,25 @@
 			return;
 		}
 
+		const nativeShare = event.target.closest('[data-native-share]');
+		if (nativeShare) {
+			const shareData = {
+				title: nativeShare.dataset.shareTitle || document.title,
+				text: nativeShare.dataset.shareTitle || document.title,
+				url: window.location.href
+			};
+			if (navigator.share) {
+				navigator.share(shareData).catch(() => {});
+			} else {
+				navigator.clipboard?.writeText(window.location.href).then(() => {
+					const old = nativeShare.textContent;
+					nativeShare.textContent = 'Link copied';
+					setTimeout(() => { nativeShare.textContent = old; }, 1200);
+				});
+			}
+			return;
+		}
+
 		const copy = event.target.closest('[data-copy-link]');
 		if (copy) {
 			navigator.clipboard?.writeText(window.location.href).then(() => {
