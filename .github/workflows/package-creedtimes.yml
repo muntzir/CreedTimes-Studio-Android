@@ -40,23 +40,23 @@ jobs:
           set -euo pipefail
           mkdir -p dist
           (cd web-build/theme && zip -rq ../../dist/creed-times-2.3.0.zip creed-times-2)
-          (cd web-build/plugin && zip -rq ../../dist/creed-times-core-2.3.0.zip creed-times-core)
+          (cd web-build/plugin && zip -rq ../../dist/creed-times-core-2.3.1.zip creed-times-core)
           cp web-build/README.md dist/INSTALLATION-README.md
 
       - name: Build complete bundle
         shell: bash
         run: |
           set -euo pipefail
-          (cd dist && zip -rq creed-times-2.3-complete-package.zip             creed-times-2.3.0.zip             creed-times-core-2.3.0.zip             INSTALLATION-README.md)
+          (cd dist && zip -rq creed-times-2.3.1-complete-package.zip             creed-times-2.3.0.zip             creed-times-core-2.3.1.zip             INSTALLATION-README.md)
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: creed-times-2.3-package
+          name: creed-times-2.3.1-package
           path: |
             dist/creed-times-2.3.0.zip
-            dist/creed-times-core-2.3.0.zip
-            dist/creed-times-2.3-complete-package.zip
+            dist/creed-times-core-2.3.1.zip
+            dist/creed-times-2.3.1-complete-package.zip
             dist/INSTALLATION-README.md
           if-no-files-found: error
           retention-days: 30
