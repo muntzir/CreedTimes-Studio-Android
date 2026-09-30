@@ -1,0 +1,125 @@
+CREED TIMES 2.0 — INSTALLATION
+
+IMPORTANT:
+- You already have a full Hostinger backup. Keep it.
+- Do not delete old content, media, authors or URLs.
+- Install the Core plugin first, then the Theme.
+- The migration included here is intentionally non-destructive.
+
+1) INSTALL THE CORE PLUGIN
+WordPress > Plugins > Add New Plugin > Upload Plugin
+Upload: creed-times-core-2.0.zip
+Activate it.
+
+2) RUN SAFE CONTENT MIGRATION
+WordPress > Creed Times
+Click: Run Safe Creed Times Migration
+
+This will:
+- keep existing posts, authors, media, dates, slugs and URLs
+- create new editorial taxonomies: Language, Editorial Format, Region, Topic
+- map Urdu / Roman Urdu safely
+- map West Asia / World into Regions
+- map Analysis / News / Documentaries into Editorial Formats
+- map Politics / Religion / Art into Topics
+- map legacy “For Subscribers” content to Creed Pro
+- mark obvious old Glossier/demo tags as legacy so the new theme hides them
+- NOT delete old categories/tags/content
+
+3) INSTALL THE THEME
+WordPress > Appearance > Themes > Add New Theme > Upload Theme
+Upload: creed-times-2.0-theme.zip
+Activate it.
+
+4) SET OFFICIAL LOGO + FAVICON
+Appearance > Customize > Site Identity:
+- Custom Logo: upload/select your official Creed Times blue/orange full logo
+- Site Icon: upload/select your official Creed Times monogram/favicon
+
+The theme intentionally uses WordPress Custom Logo and Site Icon so your real supplied brand files are used instead of a recreated logo.
+
+5) NAVIGATION
+Appearance > Menus:
+Assign your main menu to “Primary Navigation”.
+
+Recommended order:
+Home
+Latest
+West Asia
+Pakistan
+World
+Analysis
+Urdu
+Videos
+Shorts
+Podcasts
+Authors
+
+6) SOCIAL LINKS
+Appearance > Customize > Creed Times Brand & Social
+
+Defaults already included:
+Facebook: https://facebook.com/creedtimes
+Instagram: https://instagram.com/creed.times
+YouTube: https://youtube.com/@creedtimes
+WhatsApp Channel: https://whatsapp.com/channel/0029VbDZdu7AInPo7csvQi0Z
+WhatsApp Group: https://chat.whatsapp.com/C2IysQwYjuJ36ImEWG7Md2
+
+X is intentionally blank until you enter the correct official URL.
+
+7) CREED PRO
+The plugin integrates with Paid Memberships Pro if it is active.
+WordPress > Creed Times:
+Enter the PMPro Membership Level ID(s) that should unlock Creed Pro.
+If left blank, any active PMPro membership is treated as Pro.
+
+8) AUTHORS
+Edit each WordPress user profile and set:
+Creed Times Author Profile > Designation
+
+9) PUBLISHING
+Every story now supports:
+Access: Free / Creed Pro
+Editor’s Pick
+Trending / The Spike
+Developing Story
+Audio Article URL
+Show / Program Name
+Duration
+Video URL
+Key Points
+Sources & References
+
+New taxonomies:
+Language
+Editorial Format
+Region
+Topic
+
+10) USER FEATURES
+Free logged-in users:
+Save / bookmark
+Private article notes
+Follow authors
+Reading history
+Personal profile dashboard
+
+Creed Pro:
+Premium story/media access through Paid Memberships Pro
+
+11) PREVIEW
+Open: CreedTimes-2.0-Preview.html
+
+12) CACHE
+After activation:
+- purge LiteSpeed Cache
+- regenerate Elementor CSS only if old Elementor pages still use it
+- hard refresh browser
+
+13) OLD THEME / PLUGINS
+Do NOT immediately delete Glossier/CMSMasters/Elementor.
+First verify the new theme.
+After approval, old theme-specific plugins can be removed in a separate cleanup step.
+
+CREED TIMES 2.0
+News · Analysis · Perspective
