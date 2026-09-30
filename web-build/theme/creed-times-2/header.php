@@ -21,10 +21,11 @@ $ct_social = ct_get_social_links();
 			<span><?php esc_html_e( 'Stay informed. Stay aware.', 'creed-times' ); ?></span>
 		</div>
 		<div class="ctn-topbar__right">
-			<a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+			<a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About</a>
 			<a href="<?php echo esc_url( home_url( '/authors/' ) ); ?>">Authors</a>
 			<a href="<?php echo esc_url( home_url( '/contribute/' ) ); ?>">Contribute</a>
-			<a href="<?php echo esc_url( home_url( '/category/urdu/' ) ); ?>" lang="ur" dir="rtl">اردو</a>
+			<a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Contact</a>
+			<a href="<?php echo esc_url( ct_section_url( 'urdu' ) ); ?>" lang="ur" dir="rtl">اردو</a>
 		</div>
 	</div>
 </div>
@@ -39,18 +40,18 @@ $ct_social = ct_get_social_links();
 				<?php if ( has_custom_logo() ) : ?>
 					<?php echo wp_get_attachment_image( get_theme_mod( 'custom_logo' ), 'full', false, array( 'class' => 'custom-logo', 'alt' => get_bloginfo( 'name' ) ) ); ?>
 				<?php else : ?>
-					<span class="ctn-brand__fallback"><strong>CREED</strong><em>TIMES</em><small>NEWS · ANALYSIS · PERSPECTIVE</small></span>
+					<img class="ctn-brand__default" src="<?php echo esc_url( ct_brand_wordmark_url() ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 				<?php endif; ?>
 			</a>
 		</div>
 
 		<nav class="ctn-nav" aria-label="<?php esc_attr_e( 'Primary navigation', 'creed-times' ); ?>">
 			<a class="<?php echo is_front_page() ? 'is-active' : ''; ?>" href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
-			<a href="<?php echo esc_url( home_url( '/category/news/' ) ); ?>">Latest</a>
-			<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'west-asia', '/category/west_asia/' ) ); ?>">West Asia</a>
-			<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'pakistan', '/region/pakistan/' ) ); ?>">Pakistan</a>
-			<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'world', '/category/world/' ) ); ?>">World</a>
-			<a href="<?php echo esc_url( home_url( '/category/analysis/' ) ); ?>">Analysis</a>
+			<a href="<?php echo esc_url( ct_section_url( 'latest' ) ); ?>">Latest</a>
+			<a href="<?php echo esc_url( ct_section_url( 'west-asia' ) ); ?>">West Asia</a>
+			<a href="<?php echo esc_url( ct_section_url( 'pakistan' ) ); ?>">Pakistan</a>
+			<a href="<?php echo esc_url( ct_section_url( 'world' ) ); ?>">World</a>
+			<a href="<?php echo esc_url( ct_section_url( 'analysis' ) ); ?>">Analysis</a>
 			<?php if ( post_type_exists( 'ct_video' ) ) : ?><a href="<?php echo esc_url( get_post_type_archive_link( 'ct_video' ) ); ?>">Videos</a><?php endif; ?>
 			<a href="<?php echo esc_url( home_url( '/authors/' ) ); ?>">Authors</a>
 		</nav>
@@ -75,15 +76,16 @@ $ct_social = ct_get_social_links();
 			</form>
 			<nav>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
-				<a href="<?php echo esc_url( home_url( '/category/news/' ) ); ?>">Latest</a>
-				<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'west-asia', '/category/west_asia/' ) ); ?>">West Asia</a>
-				<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'pakistan', '/region/pakistan/' ) ); ?>">Pakistan</a>
-				<a href="<?php echo esc_url( ct_tax_url( 'ct_region', 'world', '/category/world/' ) ); ?>">World</a>
-				<a href="<?php echo esc_url( home_url( '/category/analysis/' ) ); ?>">Analysis</a>
-				<a href="<?php echo esc_url( home_url( '/category/urdu/' ) ); ?>" lang="ur">اردو</a>
+				<a href="<?php echo esc_url( ct_section_url( 'latest' ) ); ?>">Latest</a>
+				<a href="<?php echo esc_url( ct_section_url( 'west-asia' ) ); ?>">West Asia</a>
+				<a href="<?php echo esc_url( ct_section_url( 'pakistan' ) ); ?>">Pakistan</a>
+				<a href="<?php echo esc_url( ct_section_url( 'world' ) ); ?>">World</a>
+				<a href="<?php echo esc_url( ct_section_url( 'analysis' ) ); ?>">Analysis</a>
+				<a href="<?php echo esc_url( ct_section_url( 'urdu' ) ); ?>" lang="ur">اردو</a>
 				<?php if ( post_type_exists( 'ct_video' ) ) : ?><a href="<?php echo esc_url( get_post_type_archive_link( 'ct_video' ) ); ?>">Videos</a><?php endif; ?>
 				<?php if ( post_type_exists( 'ct_short' ) ) : ?><a href="<?php echo esc_url( get_post_type_archive_link( 'ct_short' ) ); ?>">Shorts</a><?php endif; ?>
 				<?php if ( post_type_exists( 'ct_podcast' ) ) : ?><a href="<?php echo esc_url( get_post_type_archive_link( 'ct_podcast' ) ); ?>">Podcasts</a><?php endif; ?>
+				<a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About</a>
 			</nav>
 			<div class="ctn-mobile-cta">
 				<a href="<?php echo esc_url( $ct_social['whatsapp'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?> Channel</a>
