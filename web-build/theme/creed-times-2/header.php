@@ -57,13 +57,13 @@ $ct_social = ct_get_social_links();
 
 		<div class="ct-header__actions">
 			<div class="ct-social-icons">
-				<?php if ( $ct_social['facebook'] ) : ?><a href="<?php echo esc_url( $ct_social['facebook'] ); ?>" target="_blank" rel="noopener" aria-label="Facebook">f</a><?php endif; ?>
-				<?php if ( $ct_social['instagram'] ) : ?><a href="<?php echo esc_url( $ct_social['instagram'] ); ?>" target="_blank" rel="noopener" aria-label="Instagram">◎</a><?php endif; ?>
-				<?php if ( $ct_social['youtube'] ) : ?><a href="<?php echo esc_url( $ct_social['youtube'] ); ?>" target="_blank" rel="noopener" aria-label="YouTube">▶</a><?php endif; ?>
-				<?php if ( $ct_social['x'] ) : ?><a href="<?php echo esc_url( $ct_social['x'] ); ?>" target="_blank" rel="noopener" aria-label="X">X</a><?php endif; ?>
+				<?php if ( $ct_social['facebook'] ) : ?><a href="<?php echo esc_url( $ct_social['facebook'] ); ?>" target="_blank" rel="noopener" aria-label="Facebook"><?php echo ct_brand_icon( 'facebook' ); ?></a><?php endif; ?>
+				<?php if ( $ct_social['instagram'] ) : ?><a href="<?php echo esc_url( $ct_social['instagram'] ); ?>" target="_blank" rel="noopener" aria-label="Instagram"><?php echo ct_brand_icon( 'instagram' ); ?></a><?php endif; ?>
+				<?php if ( $ct_social['youtube'] ) : ?><a href="<?php echo esc_url( $ct_social['youtube'] ); ?>" target="_blank" rel="noopener" aria-label="YouTube"><?php echo ct_brand_icon( 'youtube' ); ?></a><?php endif; ?>
+				<?php if ( $ct_social['x'] ) : ?><a href="<?php echo esc_url( $ct_social['x'] ); ?>" target="_blank" rel="noopener" aria-label="X"><?php echo ct_brand_icon( 'x' ); ?></a><?php endif; ?>
 			</div>
-			<a class="ct-wa-btn" href="<?php echo esc_url( $ct_social['whatsapp'] ); ?>" target="_blank" rel="noopener"><span class="ct-wa-dot">●</span><?php esc_html_e( 'WhatsApp Channel', 'creed-times' ); ?></a>
-			<a class="ct-wa-btn ct-wa-btn--group" href="<?php echo esc_url( $ct_social['group'] ); ?>" target="_blank" rel="noopener"><span class="ct-wa-dot">●</span><?php esc_html_e( 'WhatsApp Group', 'creed-times' ); ?></a>
+			<a class="ct-wa-btn" href="<?php echo esc_url( $ct_social['whatsapp'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?><?php esc_html_e( 'WhatsApp Channel', 'creed-times' ); ?></a>
+			<a class="ct-wa-btn ct-wa-btn--group" href="<?php echo esc_url( $ct_social['group'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?><?php esc_html_e( 'WhatsApp Group', 'creed-times' ); ?></a>
 			<button class="ct-mobile-search-btn" type="button" data-search-overlay-toggle aria-label="<?php esc_attr_e( 'Search', 'creed-times' ); ?>"><?php echo ct_icon( 'search' ); ?></button>
 		</div>
 	</div>
