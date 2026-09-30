@@ -1,6 +1,6 @@
-# Creed Times 2.0 — WordPress Rebuild
+# Creed Times 2.1 — WordPress Rebuild
 
-This build is based on the Creed Times 2.0 master brief and the WordPress/WXR structure supplied for creedtimes.com.
+This build is based on the Creed Times 2.0/2.1 master brief and the WordPress/WXR structure supplied for creedtimes.com.
 
 ## Packages
 - **Theme:** `creed-times-2`
@@ -69,13 +69,13 @@ Obvious Glossier/demo tags such as beauty/vogue/tips/style are marked as legacy 
 3. Activate it.
 4. WordPress → Creed Times → run **Safe Creed Times Migration**.
 5. If Paid Memberships Pro is being used, add the Creed Pro PMPro level ID in Creed Times settings.
-6. Appearance → Themes → Add New → Upload Theme → upload `creed-times-2.0.0.zip`.
+6. Appearance → Themes → Add New → Upload Theme → upload `creed-times-2.1.0.zip`.
 7. Activate the theme.
 8. Set the official Blue + Orange Creed Times logo under Site Identity.
 9. Set the official CT monogram as the WordPress Site Icon / favicon.
-10. Confirm the Primary Navigation menu.
+10. The 2.1 header uses its own clean Creed Times navigation so old Glossier/WooCommerce menu items cannot leak into the header.
 11. Check homepage, article, author, profile, search and Urdu pages.
-12. Clear LiteSpeed Cache.
+12. Clear LiteSpeed Cache and browser cache after replacing the theme.
 
 ## Logo note
 The theme intentionally does not redraw your logo. WordPress uses the official logo uploaded under Site Identity, which avoids replacing your real mark with an approximation.
@@ -85,3 +85,24 @@ The theme and plugin render existing WordPress content dynamically. The migratio
 
 ## Preview
 Open the HTML files inside `web-build/preview/` before activation to review the visual direction.
+
+
+## 2.1 homepage fix
+Version 2.1 replaces the first homepage/header direction with a lighter, cleaner newsroom UI.
+
+Key fixes:
+- removes the old WordPress-assigned menu from the visual header, preventing Checkout / Membership / Shop pages from appearing as a bullet list
+- one controlled modern navigation
+- lighter white / soft-gray design
+- compact Newsroom update strip
+- split featured story card instead of an oversized dark hero
+- Latest Pulse panel
+- The Spike carousel
+- latest story grid + Popular Now
+- cleaner author cards
+- Analysis & Perspective area
+- media area
+- Urdu desk
+- refined responsive mobile header
+
+When replacing an existing 2.0 theme, WordPress may show “Replace current with uploaded”. Use that option, then purge LiteSpeed Cache.
