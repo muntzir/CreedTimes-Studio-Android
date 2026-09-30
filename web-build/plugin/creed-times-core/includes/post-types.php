@@ -12,7 +12,7 @@ function ct_core_register_content_types() {
 		),
 		'ct_short' => array(
 			'singular' => 'Short',
-			'plural'   => 'Shorts',
+			'plural'   => 'Reels / Shorts',
 			'slug'     => 'shorts',
 			'icon'     => 'dashicons-format-video',
 			'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author', 'comments', 'revisions' ),
@@ -46,6 +46,7 @@ function ct_core_register_content_types() {
 			'has_archive'  => true,
 			'rewrite'      => array( 'slug' => $config['slug'], 'with_front' => false ),
 			'menu_icon'    => $config['icon'],
+			'show_in_menu' => 'creed-times-core',
 			'supports'     => $config['supports'],
 			'taxonomies'   => array( 'post_tag' ),
 		) );
@@ -139,3 +140,24 @@ function ct_core_seed_terms() {
 	}
 }
 add_action( 'init', 'ct_core_seed_terms', 20 );
+
+
+/**
+ * Keep a normalized content-kind meta field on all Creed Times content.
+ * This also lets legacy articles that were built as video/podcast posts join the new archives.
+ */
+function ct_core_set_content_kind_meta( $post_id, $post, $update ) {
+	if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) { return; }
+
+	$kind_map = array(
+		'ct_video'   => 'video',
+		'ct_short'   => 'short',
+		'ct_podcast' => 'podcast',
+		'ct_artwork' => 'visual',
+		'post'       => get_post_meta( $post_id, '_ct_legacy_content_kind', true ) ?: 'article',
+	);
+	if ( isset( $kind_map[ $post->post_type ] ) ) {
+		update_post_meta( $post_id, '_ct_content_kind', $kind_map[ $post->post_type ] );
+	}
+}
+add_action( 'save_post', 'ct_core_set_content_kind_meta', 20, 3 );
