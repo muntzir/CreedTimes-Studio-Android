@@ -6,7 +6,7 @@ $is_pro = ct_is_pro_post( $post_id );
 <article <?php post_class( 'ct-story-card' ); ?>>
 	<a class="ct-story-card__media" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( get_the_title() ); ?>">
 		<?php if ( has_post_thumbnail() ) : ?>
-			<?php the_post_thumbnail( 'ct-card', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); ?>
+			<?php the_post_thumbnail( 'full', array( 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 430px' ) ); ?>
 		<?php else : ?>
 			<div class="ct-media-fallback"><span>CT</span></div>
 		<?php endif; ?>
