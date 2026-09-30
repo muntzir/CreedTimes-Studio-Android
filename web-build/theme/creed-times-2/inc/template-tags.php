@@ -124,3 +124,17 @@ function ct_author_designation( $user_id ) {
 function ct_legacy_tag_excluded( $term_id ) {
 	return (bool) get_term_meta( $term_id, '_ct_legacy_demo', true );
 }
+
+
+function ct_tax_url( $taxonomy, $slug, $fallback = '' ) {
+	if ( taxonomy_exists( $taxonomy ) ) {
+		$term = get_term_by( 'slug', $slug, $taxonomy );
+		if ( $term && ! is_wp_error( $term ) ) {
+			$url = get_term_link( $term );
+			if ( ! is_wp_error( $url ) ) {
+				return $url;
+			}
+		}
+	}
+	return $fallback ? home_url( $fallback ) : home_url( '/' );
+}
