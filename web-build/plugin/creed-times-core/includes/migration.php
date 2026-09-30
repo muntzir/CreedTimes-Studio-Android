@@ -22,13 +22,16 @@ function ct_core_run_safe_migration() {
 		'beauty','vogue','vouge','tips','today','culture','life','style','stylish',
 		'gift','newface','trends','fancy','future'
 	);
+	$legacy_demo_ids = array();
 	foreach ( $legacy_demo_tags as $slug ) {
 		$term = get_term_by( 'slug', $slug, 'post_tag' );
 		if ( $term && ! is_wp_error( $term ) ) {
 			update_term_meta( $term->term_id, '_ct_legacy_demo', '1' );
+			$legacy_demo_ids[] = (int) $term->term_id;
 			$report['demo_tags_marked']++;
 		}
 	}
+	update_option( 'ct_legacy_demo_tag_ids', array_values( array_unique( $legacy_demo_ids ) ) );
 
 	$post_ids = get_posts( array(
 		'post_type'      => 'post',
@@ -125,15 +128,9 @@ function ct_core_run_safe_migration() {
 
 function ct_core_hide_legacy_demo_tags( $args, $taxonomies ) {
 	if ( is_admin() || ! in_array( 'post_tag', (array) $taxonomies, true ) ) { return $args; }
-	$legacy = get_terms( array(
-		'taxonomy'   => 'post_tag',
-		'hide_empty' => false,
-		'meta_key'   => '_ct_legacy_demo',
-		'meta_value' => '1',
-		'fields'     => 'ids',
-	) );
-	if ( $legacy && ! is_wp_error( $legacy ) ) {
-		$args['exclude'] = array_unique( array_merge( (array) ( $args['exclude'] ?? array() ), array_map( 'absint', $legacy ) ) );
+	$legacy = array_values( array_filter( array_map( 'absint', (array) get_option( 'ct_legacy_demo_tag_ids', array() ) ) ) );
+	if ( $legacy ) {
+		$args['exclude'] = array_unique( array_merge( (array) ( $args['exclude'] ?? array() ), $legacy ) );
 	}
 	return $args;
 }
