@@ -24,6 +24,7 @@ require_once CT_CORE_DIR . 'includes/membership.php';
 require_once CT_CORE_DIR . 'includes/user-tools.php';
 require_once CT_CORE_DIR . 'includes/migration.php';
 require_once CT_CORE_DIR . 'includes/admin.php';
+require_once CT_CORE_DIR . 'includes/login-branding.php';
 
 function ct_core_assets() {
 	wp_enqueue_script(
