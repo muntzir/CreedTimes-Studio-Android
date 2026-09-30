@@ -151,3 +151,65 @@ function ct_brand_icon( $name ) {
 	if ( empty( $icons[ $name ] ) ) { return ''; }
 	return '<svg class="ct-brand-icon" viewBox="0 0 24 24" aria-hidden="true">' . $icons[ $name ] . '</svg>';
 }
+
+
+/**
+ * Resolve stable navigation URLs while preserving Creed Times' legacy slugs.
+ */
+function ct_section_url( $section ) {
+	$section = sanitize_key( $section );
+
+	$legacy_categories = array(
+		'latest'    => array( 'news' ),
+		'west-asia' => array( 'west_asia', 'west-asia' ),
+		'world'     => array( 'world' ),
+		'analysis'  => array( 'analysis' ),
+		'urdu'      => array( 'urdu' ),
+	);
+
+	if ( isset( $legacy_categories[ $section ] ) ) {
+		foreach ( $legacy_categories[ $section ] as $slug ) {
+			$term = get_category_by_slug( $slug );
+			if ( $term ) {
+				$url = get_category_link( $term->term_id );
+				if ( ! is_wp_error( $url ) ) {
+					return $url;
+				}
+			}
+		}
+	}
+
+	if ( 'pakistan' === $section && taxonomy_exists( 'ct_region' ) ) {
+		$term = get_term_by( 'slug', 'pakistan', 'ct_region' );
+		if ( $term && ! is_wp_error( $term ) && (int) $term->count > 0 ) {
+			$url = get_term_link( $term );
+			if ( ! is_wp_error( $url ) ) {
+				return $url;
+			}
+		}
+		return add_query_arg( 's', 'Pakistan', home_url( '/' ) );
+	}
+
+	if ( in_array( $section, array( 'west-asia', 'world' ), true ) && taxonomy_exists( 'ct_region' ) ) {
+		$term = get_term_by( 'slug', $section, 'ct_region' );
+		if ( $term && ! is_wp_error( $term ) && (int) $term->count > 0 ) {
+			$url = get_term_link( $term );
+			if ( ! is_wp_error( $url ) ) {
+				return $url;
+			}
+		}
+	}
+
+	return home_url( '/' );
+}
+
+/**
+ * Default bundled brand assets. A WordPress Custom Logo still overrides this.
+ */
+function ct_brand_wordmark_url() {
+	return get_theme_file_uri( 'assets/brand/creed-times-wordmark.svg' );
+}
+
+function ct_brand_mark_url() {
+	return get_theme_file_uri( 'assets/brand/creed-times-mark.svg' );
+}
