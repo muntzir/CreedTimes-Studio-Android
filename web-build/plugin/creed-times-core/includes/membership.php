@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function ct_core_pro_level_ids() {
 	$raw = (string) get_option( 'ct_pro_level_ids', '' );
-	$ids = array_filter( array_map( 'absint', preg_split( '/[,s]+/', $raw ) ) );
+	$ids = array_filter( array_map( 'absint', preg_split( '/[,\\s]+/', $raw ) ) );
 	return array_values( $ids );
 }
 
