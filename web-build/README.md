@@ -135,24 +135,23 @@ No fake or temporary ChatGPT URL is hardcoded into the website.
 3. Upload `creed-times-core-2.3.0.zip`.
 4. If WordPress asks, choose **Replace current with uploaded**.
 5. Activate / keep Creed Times Core active.
-6. Go to **Creed Times → Editorial Structure**.
-7. Click **Run Safe Editorial Cleanup** once.
-8. Go to **Creed Times → Settings** and confirm:
+6. Core 2.3 automatically runs the non-destructive editorial cleanup once on upgrade. You can review or rerun it from **Creed Times → Editorial Structure**.
+7. Go to **Creed Times → Settings** and confirm:
    - email
    - WhatsApp / phone
    - YouTube URL
    - app URL/version when uploaded
    - PMPro Creed Pro level ID if required
-9. Go to **Creed Times → Dashboard → Sync YouTube Now** once.
-10. Appearance → Themes → Add New → Upload Theme.
-11. Upload `creed-times-2.3.0.zip`.
-12. Choose **Replace current with uploaded**, then activate/keep active.
-13. Appearance / Site Identity:
+8. An initial YouTube sync is queued automatically. You can also use **Creed Times → Dashboard → Sync YouTube Now**.
+9. Appearance → Themes → Add New → Upload Theme.
+10. Upload `creed-times-2.3.0.zip`.
+11. Choose **Replace current with uploaded**, then activate/keep active.
+12. Appearance / Site Identity:
     - set exact Creed Times full logo
     - set CT monogram as Site Icon
-14. Settings → Permalinks → click **Save Changes** once.
-15. LiteSpeed Cache → Toolbox → Purge → **Purge All**.
-16. Browser hard refresh: Ctrl + F5.
+13. Settings → Permalinks → click **Save Changes** once.
+14. LiteSpeed Cache → Toolbox → Purge → **Purge All**.
+15. Browser hard refresh: Ctrl + F5.
 
 ## Pages maintained automatically
 
