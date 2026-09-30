@@ -14,7 +14,14 @@ function ct_core_user_has_pro( $user_id = 0 ) {
 
 	if ( function_exists( 'pmpro_hasMembershipLevel' ) ) {
 		$levels = ct_core_pro_level_ids();
-		return $levels ? (bool) pmpro_hasMembershipLevel( $levels, $user_id ) : (bool) pmpro_hasMembershipLevel( null, $user_id );
+		if ( $levels ) {
+			return (bool) pmpro_hasMembershipLevel( $levels, $user_id );
+		}
+		if ( function_exists( 'pmpro_getMembershipLevelForUser' ) ) {
+			$level = pmpro_getMembershipLevelForUser( $user_id );
+			return ! empty( $level ) && ! empty( $level->id );
+		}
+		return false;
 	}
 
 	return (bool) get_user_meta( $user_id, '_ct_pro_member', true );
