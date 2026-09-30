@@ -67,7 +67,15 @@ while ( have_posts() ) :
 			</div>
 		</header>
 
-		<?php if ( has_post_thumbnail() ) : ?>
+		<?php
+		$video_url = get_post_meta( $post_id, '_ct_video_url', true );
+		if ( $video_url ) :
+			$embed = wp_oembed_get( $video_url );
+		?>
+			<div class="ct-container ct-article-video"><?php echo $embed ? wp_kses_post( $embed ) : '<a href="' . esc_url( $video_url ) . '" target="_blank" rel="noopener">Watch video ↗</a>'; ?></div>
+		<?php endif; ?>
+
+		<?php if ( has_post_thumbnail() && ! $video_url ) : ?>
 			<div class="ct-container ct-article-hero">
 				<?php the_post_thumbnail( 'ct-hero', array( 'class' => 'ct-article-hero__image', 'fetchpriority' => 'high', 'decoding' => 'async' ) ); ?>
 				<?php if ( get_the_post_thumbnail_caption() ) : ?><p class="ct-article-caption"><?php echo wp_kses_post( get_the_post_thumbnail_caption() ); ?></p><?php endif; ?>
