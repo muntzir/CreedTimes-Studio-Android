@@ -63,6 +63,10 @@ function ct_core_deactivate() {
 	if ( $timestamp ) {
 		wp_unschedule_event( $timestamp, 'ct_core_youtube_sync_event' );
 	}
+	$initial = wp_next_scheduled( 'ct_core_youtube_initial_sync_event' );
+	if ( $initial ) {
+		wp_unschedule_event( $initial, 'ct_core_youtube_initial_sync_event' );
+	}
 	flush_rewrite_rules();
 }
 register_deactivation_hook( __FILE__, 'ct_core_deactivate' );
