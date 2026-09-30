@@ -32,7 +32,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          (cd web-build/theme && zip -rq ../../dist/creed-times-2.0.0.zip creed-times-2)
+          (cd web-build/theme && zip -rq ../../dist/creed-times-2.1.0.zip creed-times-2)
           (cd web-build/plugin && zip -rq ../../dist/creed-times-core-2.0.0.zip creed-times-core)
           cp web-build/preview/*.html dist/
           cp web-build/README.md dist/INSTALLATION-README.md
@@ -41,16 +41,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          (cd dist && zip -rq creed-times-2.0-complete-package.zip             creed-times-2.0.0.zip             creed-times-core-2.0.0.zip             creed-times-homepage-preview.html             creed-times-article-preview.html             creed-times-profile-preview.html             INSTALLATION-README.md)
+          (cd dist && zip -rq creed-times-2.1-complete-package.zip             creed-times-2.1.0.zip             creed-times-core-2.0.0.zip             creed-times-homepage-preview.html             creed-times-article-preview.html             creed-times-profile-preview.html             INSTALLATION-README.md)
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: creed-times-2.0-package
+          name: creed-times-2.1-package
           path: |
-            dist/creed-times-2.0.0.zip
+            dist/creed-times-2.1.0.zip
             dist/creed-times-core-2.0.0.zip
-            dist/creed-times-2.0-complete-package.zip
+            dist/creed-times-2.1-complete-package.zip
             dist/creed-times-homepage-preview.html
             dist/creed-times-article-preview.html
             dist/creed-times-profile-preview.html
