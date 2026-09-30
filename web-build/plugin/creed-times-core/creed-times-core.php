@@ -81,6 +81,20 @@ function ct_core_maybe_upgrade() {
 
 	ct_core_ensure_required_pages();
 
+	// Run the non-destructive editorial normalization once for this plugin version.
+	if ( get_option( 'ct_core_migration_version' ) !== CT_CORE_VERSION ) {
+		ct_core_run_safe_migration();
+		update_option( 'ct_core_migration_version', CT_CORE_VERSION );
+	}
+
+	// Queue an initial YouTube import shortly after the upgrade without blocking page load.
+	if ( ! wp_next_scheduled( 'ct_core_youtube_sync_event' ) ) {
+		wp_schedule_event( time() + 300, 'hourly', 'ct_core_youtube_sync_event' );
+	}
+	if ( ! wp_next_scheduled( 'ct_core_youtube_initial_sync_event' ) ) {
+		wp_schedule_single_event( time() + 60, 'ct_core_youtube_initial_sync_event' );
+	}
+
 	// Use exact Creed Times brand uploads automatically if they already exist in Media Library.
 	$logo_candidates = get_posts( array(
 		'post_type'      => 'attachment',
@@ -106,3 +120,11 @@ function ct_core_maybe_upgrade() {
 	update_option( 'ct_core_schema_version', CT_CORE_VERSION );
 }
 add_action( 'init', 'ct_core_maybe_upgrade', 98 );
+
+
+function ct_core_initial_youtube_sync() {
+	if ( function_exists( 'ct_core_sync_youtube' ) ) {
+		ct_core_sync_youtube();
+	}
+}
+add_action( 'ct_core_youtube_initial_sync_event', 'ct_core_initial_youtube_sync' );
