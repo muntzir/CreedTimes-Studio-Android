@@ -36,8 +36,6 @@ function ct_core_ensure_required_pages() {
 		}
 	}
 }
-add_action( 'init', 'ct_core_ensure_required_pages', 90 );
-
 function ct_core_force_page_templates( $template ) {
 	if ( ! is_page() ) { return $template; }
 
@@ -85,4 +83,4 @@ function ct_core_detect_app_attachment() {
 		}
 	}
 }
-add_action( 'init', 'ct_core_detect_app_attachment', 95 );
+add_action( 'admin_init', 'ct_core_detect_app_attachment', 95 );
