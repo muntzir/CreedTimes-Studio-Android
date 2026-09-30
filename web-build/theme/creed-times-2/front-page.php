@@ -149,7 +149,7 @@ function ctn_home_read( $post_id ) {
 	<section class="ctn-section ctn-authors">
 		<div class="ct-container">
 			<div class="ctn-section-head">
-				<div><span class="ctn-kicker">VOICES</span><h2>Authors & contributors.</h2></div>
+				<div><span class="ctn-kicker">VOICES</span><h2>Authors & writers.</h2></div>
 				<a class="ctn-text-link" href="<?php echo esc_url( home_url( '/authors/' ) ); ?>">Meet the team →</a>
 			</div>
 			<div class="ctn-author-layout">
