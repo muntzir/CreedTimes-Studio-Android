@@ -62,7 +62,8 @@ $ct_app_url = ct_app_download_url();
 				<h3>Account</h3>
 				<a href="<?php echo esc_url( home_url( '/profile/' ) ); ?>">My Profile</a>
 				<a href="<?php echo esc_url( home_url( '/creed-pro/' ) ); ?>">Creed Pro</a>
-				<?php if ( $ct_app_url ) : ?><a href="<?php echo esc_url( $ct_app_url ); ?>" target="_blank" rel="noopener">Download App v<?php echo esc_html( ct_app_version() ); ?> ↗</a><?php endif; ?>
+				<a href="<?php echo esc_url( home_url( '/app/' ) ); ?>">Mobile App</a>
+				<?php if ( $ct_app_url ) : ?><a href="<?php echo esc_url( $ct_app_url ); ?>" target="_blank" rel="noopener">Download App v<?php echo esc_html( ct_app_version() ); ?> ↓</a><?php endif; ?>
 				<a href="mailto:<?php echo esc_attr( $ct_contact['email'] ); ?>"><?php echo esc_html( $ct_contact['email'] ); ?></a>
 			</div>
 		</div>
