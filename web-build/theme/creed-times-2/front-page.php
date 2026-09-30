@@ -33,7 +33,7 @@ $urdu_q = new WP_Query( array(
 
 function ctn_home_image( $post_id, $size = 'ct-card', $class = '' ) {
 	if ( has_post_thumbnail( $post_id ) ) {
-		echo get_the_post_thumbnail( $post_id, $size, array( 'class' => $class, 'loading' => 'lazy', 'decoding' => 'async' ) );
+		echo get_the_post_thumbnail( $post_id, 'full', array( 'class' => $class, 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 760px' ) );
 	} else {
 		echo '<div class="ctn-fallback ' . esc_attr( $class ) . '"><span>CT</span></div>';
 	}
