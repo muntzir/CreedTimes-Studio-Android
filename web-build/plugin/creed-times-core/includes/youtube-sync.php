@@ -48,25 +48,42 @@ function ct_core_find_youtube_video( $video_id ) {
 	return $ids ? (int) $ids[0] : 0;
 }
 
-function ct_core_sideload_youtube_thumbnail( $post_id, $url ) {
-	if ( ! $url || has_post_thumbnail( $post_id ) ) { return; }
+function ct_core_sideload_youtube_thumbnail( $post_id, $video_id, $feed_url = '' ) {
+	if ( has_post_thumbnail( $post_id ) || ! $video_id ) { return; }
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 	require_once ABSPATH . 'wp-admin/includes/media.php';
 	require_once ABSPATH . 'wp-admin/includes/image.php';
 
-	$tmp = download_url( $url, 15 );
-	if ( is_wp_error( $tmp ) ) { return; }
+	$candidates = array_filter( array(
+		'https://i.ytimg.com/vi/' . rawurlencode( $video_id ) . '/maxresdefault.jpg',
+		'https://i.ytimg.com/vi/' . rawurlencode( $video_id ) . '/sddefault.jpg',
+		'https://i.ytimg.com/vi/' . rawurlencode( $video_id ) . '/hqdefault.jpg',
+		$feed_url,
+	) );
 
-	$file = array(
-		'name' => 'youtube-' . $post_id . '.jpg',
-		'tmp_name' => $tmp,
-	);
-	$attachment_id = media_handle_sideload( $file, $post_id, get_the_title( $post_id ) );
-	if ( is_wp_error( $attachment_id ) ) {
-		@unlink( $tmp );
-		return;
+	foreach ( $candidates as $url ) {
+		$head = wp_remote_head( $url, array( 'timeout' => 8, 'redirection' => 3 ) );
+		if ( is_wp_error( $head ) || 200 !== (int) wp_remote_retrieve_response_code( $head ) ) {
+			continue;
+		}
+
+		$tmp = download_url( $url, 15 );
+		if ( is_wp_error( $tmp ) ) { continue; }
+
+		$file = array(
+			'name' => 'youtube-' . sanitize_file_name( $video_id ) . '.jpg',
+			'tmp_name' => $tmp,
+		);
+		$attachment_id = media_handle_sideload( $file, $post_id, get_the_title( $post_id ) );
+		if ( is_wp_error( $attachment_id ) ) {
+			@unlink( $tmp );
+			continue;
+		}
+
+		set_post_thumbnail( $post_id, $attachment_id );
+		update_post_meta( $post_id, '_ct_youtube_thumbnail_source', esc_url_raw( $url ) );
+		break;
 	}
-	set_post_thumbnail( $post_id, $attachment_id );
 }
 
 function ct_core_sync_youtube() {
@@ -138,7 +155,7 @@ function ct_core_sync_youtube() {
 		if ( taxonomy_exists( 'ct_format' ) ) {
 			wp_set_object_terms( $post_id, 'news', 'ct_format', true );
 		}
-		ct_core_sideload_youtube_thumbnail( $post_id, $thumbnail );
+		ct_core_sideload_youtube_thumbnail( $post_id, $video_id, $thumbnail );
 	}
 
 	$result = array(
