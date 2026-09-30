@@ -55,13 +55,16 @@ while ( have_posts() ) :
 					<div class="ct-share-menu">
 						<button class="ct-action-btn" type="button" data-share-toggle><?php echo ct_icon( 'share' ); ?> <span>Share</span></button>
 						<div class="ct-share-menu__panel" data-share-menu hidden>
-							<a href="https://wa.me/?text=<?php echo esc_attr( $share_txt . '%20' . $share_url ); ?>" target="_blank" rel="noopener">WhatsApp</a>
-							<a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_attr( $share_url ); ?>" target="_blank" rel="noopener">Facebook</a>
-							<a href="https://twitter.com/intent/tweet?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener">X</a>
-							<button type="button" data-copy-link data-copied-label="Copied">Copy link</button>
+							<a href="https://wa.me/?text=<?php echo esc_attr( $share_txt . '%20' . $share_url ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?> WhatsApp</a>
+							<a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_attr( $share_url ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'facebook' ); ?> Facebook</a>
+							<a href="https://twitter.com/intent/tweet?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'x' ); ?> X</a>
+							<a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo esc_attr( $share_url ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'linkedin' ); ?> LinkedIn</a>
+							<a href="https://t.me/share/url?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'telegram' ); ?> Telegram</a>
+							<button type="button" data-native-share data-share-title="<?php echo esc_attr( get_the_title() ); ?>"><?php echo ct_brand_icon( 'instagram' ); ?> Instagram / More</button>
+							<button type="button" data-copy-link data-copied-label="Copied"><?php echo ct_icon( 'copy' ); ?> Copy link</button>
 						</div>
 					</div>
-					<?php if ( $audio_url ) : ?><a class="ct-action-btn" href="#ct-audio-player">🔊 <span>Listen</span></a><?php endif; ?>
+					<?php if ( $audio_url ) : ?><a class="ct-action-btn" href="#ct-audio-player"><?php echo ct_icon( 'play' ); ?> <span>Listen</span></a><?php endif; ?>
 				</div>
 			</div>
 		</header>
@@ -97,10 +100,12 @@ while ( have_posts() ) :
 			<aside class="ct-article-share-rail" aria-label="Share article">
 				<div class="ct-article-share-rail__sticky">
 					<span>SHARE</span>
-					<a href="https://wa.me/?text=<?php echo esc_attr( $share_txt . '%20' . $share_url ); ?>" target="_blank" rel="noopener">WA</a>
-					<a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_attr( $share_url ); ?>" target="_blank" rel="noopener">f</a>
-					<a href="https://twitter.com/intent/tweet?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener">X</a>
-					<button type="button" data-copy-link data-copied-label="✓">↗</button>
+					<a href="https://wa.me/?text=<?php echo esc_attr( $share_txt . '%20' . $share_url ); ?>" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><?php echo ct_brand_icon( 'whatsapp' ); ?></a>
+					<a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_attr( $share_url ); ?>" target="_blank" rel="noopener" aria-label="Share on Facebook"><?php echo ct_brand_icon( 'facebook' ); ?></a>
+					<a href="https://twitter.com/intent/tweet?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener" aria-label="Share on X"><?php echo ct_brand_icon( 'x' ); ?></a>
+					<a href="https://t.me/share/url?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener" aria-label="Share on Telegram"><?php echo ct_brand_icon( 'telegram' ); ?></a>
+					<button type="button" data-native-share data-share-title="<?php echo esc_attr( get_the_title() ); ?>" aria-label="Share to Instagram or another app"><?php echo ct_brand_icon( 'instagram' ); ?></button>
+					<button type="button" data-copy-link data-copied-label="✓" aria-label="Copy link"><?php echo ct_icon( 'copy' ); ?></button>
 				</div>
 			</aside>
 
@@ -130,6 +135,18 @@ while ( have_posts() ) :
 						<a href="<?php echo esc_url( home_url( '/creed-pro/' ) ); ?>">Explore Creed Pro →</a>
 					</section>
 				<?php endif; ?>
+
+				<section class="ct-article-share-bottom">
+					<div><span class="ct-overline">SHARE THIS STORY</span><h3>Send it to someone who should read it.</h3></div>
+					<div class="ct-article-share-bottom__buttons">
+						<a href="https://wa.me/?text=<?php echo esc_attr( $share_txt . '%20' . $share_url ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?><span>WhatsApp</span></a>
+						<a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_attr( $share_url ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'facebook' ); ?><span>Facebook</span></a>
+						<a href="https://twitter.com/intent/tweet?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'x' ); ?><span>X</span></a>
+						<a href="https://t.me/share/url?url=<?php echo esc_attr( $share_url ); ?>&text=<?php echo esc_attr( $share_txt ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'telegram' ); ?><span>Telegram</span></a>
+						<button type="button" data-native-share data-share-title="<?php echo esc_attr( get_the_title() ); ?>"><?php echo ct_brand_icon( 'instagram' ); ?><span>Instagram / More</span></button>
+						<button type="button" data-copy-link data-copied-label="Copied"><?php echo ct_icon( 'copy' ); ?><span>Copy link</span></button>
+					</div>
+				</section>
 
 				<?php if ( $sources ) : ?>
 					<details class="ct-sources-box" open>
