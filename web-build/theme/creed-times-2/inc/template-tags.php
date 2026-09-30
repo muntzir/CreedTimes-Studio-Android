@@ -118,7 +118,7 @@ function ct_author_designation( $user_id ) {
 	if ( $designation ) {
 		return $designation;
 	}
-	return __( 'Contributor', 'creed-times' );
+	return __( 'Author', 'creed-times' );
 }
 
 function ct_legacy_tag_excluded( $term_id ) {
@@ -147,6 +147,9 @@ function ct_brand_icon( $name ) {
 		'youtube' => '<path fill="currentColor" stroke="none" d="M21 8.2a3 3 0 0 0-2.1-2.1C17 5.6 12 5.6 12 5.6s-5 0-6.9.5A3 3 0 0 0 3 8.2 31 31 0 0 0 2.5 12 31 31 0 0 0 3 15.8a3 3 0 0 0 2.1 2.1c1.9.5 6.9.5 6.9.5s5 0 6.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-3.8 31 31 0 0 0-.5-3.8ZM10.2 15.2V8.8L15.7 12l-5.5 3.2Z"/>',
 		'whatsapp' => '<path fill="currentColor" stroke="none" d="M12 3a8.7 8.7 0 0 0-7.5 13.1L3.4 21l5-1.1A8.7 8.7 0 1 0 12 3Zm0 15.8c-1.3 0-2.6-.4-3.7-1l-.3-.2-2.9.7.7-2.8-.2-.3A7 7 0 1 1 12 18.8Zm3.8-5.2c-.2-.1-1.2-.6-1.4-.7-.2-.1-.4-.1-.6.1-.2.2-.6.7-.8.9-.1.2-.3.2-.5.1-.2-.1-.9-.3-1.8-1.1-.6-.6-1.1-1.3-1.2-1.5-.1-.2 0-.4.1-.5l.4-.4.3-.4c.1-.2 0-.3 0-.5l-.7-1.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-.9 2.4.1 1.4 1.1 2.8 1.3 3 .2.2 2.3 3.5 5.6 4.8.8.3 1.4.5 1.9.6.8.2 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.6.3-.8.3-1.4.2-1.6-.1-.1-.2-.2-.4-.3Z"/>',
 		'x' => '<path fill="currentColor" stroke="none" d="M5 4h3.8l3.6 4.8L16.6 4H19l-5.5 6.5L19.8 20H16l-4-5.4L7.4 20H5l5.9-7.1L5 4Zm2.3 1.6 9.7 12.8h.9L8.2 5.6h-.9Z"/>',
+		'linkedin' => '<path fill="currentColor" stroke="none" d="M6.2 8.1H3.5V20h2.7V8.1ZM4.8 3.5a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2ZM20.5 13.2c0-3.6-1.9-5.3-4.5-5.3-2.1 0-3 1.1-3.5 1.9V8.1H9.8V20h2.7v-5.9c0-1.6.3-3.1 2.2-3.1 1.8 0 1.9 1.7 1.9 3.2V20h2.7l1.2-6.8Z"/>',
+		'telegram' => '<path fill="currentColor" stroke="none" d="M21 4.7 17.9 20c-.2 1.1-.9 1.4-1.8.9l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.4-.1-.6-.6-.2L5.7 13.9 1 12.4c-1-.3-1-1 .2-1.5L19.5 3.8c.8-.3 1.6.2 1.5.9Z"/>',
+		'mail' => '<path d="M4 6h16v12H4z"></path><path d="m4 7 8 6 8-6"></path>',
 	);
 	if ( empty( $icons[ $name ] ) ) { return ''; }
 	return '<svg class="ct-brand-icon" viewBox="0 0 24 24" aria-hidden="true">' . $icons[ $name ] . '</svg>';
@@ -212,4 +215,64 @@ function ct_brand_wordmark_url() {
 
 function ct_brand_mark_url() {
 	return get_theme_file_uri( 'assets/brand/creed-times-mark.svg' );
+}
+
+
+/**
+ * Contact details are stored by Creed Times Core when available.
+ */
+function ct_contact_details() {
+	return array(
+		'email'    => get_option( 'ct_contact_email', 'info@creedtimes.com' ),
+		'phone'    => get_option( 'ct_contact_phone', '+92 308 3829035' ),
+		'whatsapp' => get_option( 'ct_contact_whatsapp', '923083829035' ),
+	);
+}
+
+/**
+ * Hide the Urdu switch completely when no Urdu content exists.
+ */
+function ct_has_urdu_content() {
+	$legacy = get_category_by_slug( 'urdu' );
+	if ( $legacy && (int) $legacy->count > 0 ) {
+		return true;
+	}
+	if ( taxonomy_exists( 'ct_language' ) ) {
+		$term = get_term_by( 'slug', 'urdu', 'ct_language' );
+		if ( $term && ! is_wp_error( $term ) && (int) $term->count > 0 ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * App download is optional; no broken CTA is rendered until a real URL exists.
+ */
+function ct_app_download_url() {
+	return trim( (string) get_option( 'ct_app_download_url', '' ) );
+}
+
+function ct_app_version() {
+	return trim( (string) get_option( 'ct_app_version', '1.7.0' ) );
+}
+
+/**
+ * Use the exact WordPress custom logo when set. In dark mode CSS turns it white.
+ * The bundled vector is only a fallback.
+ */
+function ct_logo_markup( $class = '' ) {
+	$logo_id = (int) get_theme_mod( 'custom_logo' );
+	if ( $logo_id ) {
+		return wp_get_attachment_image(
+			$logo_id,
+			'full',
+			false,
+			array(
+				'class' => trim( 'ct-exact-logo ' . $class ),
+				'alt'   => get_bloginfo( 'name' ),
+			)
+		);
+	}
+	return '<img class="' . esc_attr( trim( 'ct-fallback-logo ' . $class ) ) . '" src="' . esc_url( ct_brand_wordmark_url() ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '">';
 }
