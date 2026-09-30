@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CT_THEME_VERSION', '2.1.0' );
+define( 'CT_THEME_VERSION', '2.2.0' );
 define( 'CT_THEME_DIR', get_template_directory() );
 define( 'CT_THEME_URI', get_template_directory_uri() );
 
@@ -46,6 +46,8 @@ function ct_theme_setup() {
 
 	add_image_size( 'ct-hero', 1400, 820, true );
 	add_image_size( 'ct-card', 760, 480, true );
+	add_image_size( 'ct-card-hd', 1200, 675, true );
+	add_image_size( 'ct-wide-hd', 1600, 900, true );
 	add_image_size( 'ct-square', 480, 480, true );
 	add_image_size( 'ct-portrait', 540, 900, true );
 }
@@ -165,3 +167,36 @@ function ct_theme_add_defer_attribute( $tag, $handle ) {
 	return $tag;
 }
 add_filter( 'script_loader_tag', 'ct_theme_add_defer_attribute', 10, 2 );
+
+
+/**
+ * Fallback favicon / app mark when no WordPress Site Icon has been set.
+ */
+function ct_theme_default_site_icon() {
+	if ( has_site_icon() ) {
+		return;
+	}
+	$icon = esc_url( ct_brand_mark_url() );
+	echo '<link rel="icon" href="' . $icon . '" type="image/svg+xml">' . "\n";
+	echo '<link rel="apple-touch-icon" href="' . $icon . '">' . "\n";
+}
+add_action( 'wp_head', 'ct_theme_default_site_icon', 2 );
+
+/**
+ * Keep newly introduced region/taxonomy routes from returning 404 after theme updates.
+ * Runs only once per theme version.
+ */
+function ct_theme_maybe_flush_rewrites() {
+	if ( get_option( 'ct_theme_rewrite_version' ) === CT_THEME_VERSION ) {
+		return;
+	}
+	flush_rewrite_rules( false );
+	update_option( 'ct_theme_rewrite_version', CT_THEME_VERSION );
+}
+add_action( 'init', 'ct_theme_maybe_flush_rewrites', 99 );
+
+function ct_theme_image_quality() {
+	return 90;
+}
+add_filter( 'jpeg_quality', 'ct_theme_image_quality' );
+add_filter( 'wp_editor_set_quality', 'ct_theme_image_quality' );
