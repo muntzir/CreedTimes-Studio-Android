@@ -1017,3 +1017,520 @@ html[data-theme="dark"] .ctn-fallback{background:linear-gradient(135deg,#102739,
 	.ctn-author-card{min-width:48%}
 	.ctn-urdu-grid{grid-template-columns:1fr}
 }
+
+
+/* =========================================================
+   CREED TIMES 2.2 — BRAND, ARCHIVES, ABOUT, IMAGE QUALITY
+   ========================================================= */
+.ctn-brand__default{
+	display:block;
+	width:auto;
+	max-width:198px;
+	max-height:54px;
+	object-fit:contain;
+}
+.ct-footer-default-logo{
+	display:block;
+	width:min(320px,72vw);
+	height:auto;
+	filter:brightness(0) invert(1);
+}
+.ct-story-card__media>img,
+.ctv-lead-story__media>img,
+.ctn-story-card__media>img,
+.ctn-spike-card__media>img,
+.ctn-lead-card__media>img{
+	image-rendering:auto;
+	backface-visibility:hidden;
+}
+
+/* Archive / category pages */
+.ctv-archive{
+	background:#f7f8fa;
+	min-height:70vh;
+}
+html[data-theme="dark"] .ctv-archive{background:var(--ct-bg)}
+.ctv-archive-hero{
+	padding:46px 0 24px;
+	background:linear-gradient(180deg,#fbfcfd,#f5f7f8);
+	border-bottom:1px solid var(--ct-line);
+}
+html[data-theme="dark"] .ctv-archive-hero{background:linear-gradient(180deg,#0b1927,#081522)}
+.ctv-archive-hero__top{
+	display:grid;
+	grid-template-columns:minmax(0,1fr) auto;
+	align-items:end;
+	gap:40px;
+}
+.ctv-kicker{
+	display:inline-block;
+	color:var(--ct-orange);
+	font-size:.61rem;
+	font-weight:900;
+	letter-spacing:.14em;
+	text-transform:uppercase;
+}
+.ctv-archive-hero h1{
+	margin:8px 0 0;
+	font-size:clamp(2.8rem,5vw,5.4rem);
+	line-height:.86;
+	letter-spacing:-.065em;
+	font-weight:800;
+}
+.ctv-archive-description{
+	margin-top:14px;
+	max-width:700px;
+	color:var(--ct-muted);
+	font-size:.82rem;
+	line-height:1.65;
+}
+.ctv-archive-description p{margin:0}
+.ctv-archive-hero__meta{
+	text-align:right;
+	padding-bottom:7px;
+}
+.ctv-archive-hero__meta span{
+	display:block;
+	font-size:2rem;
+	font-weight:800;
+	letter-spacing:-.05em;
+}
+.ctv-archive-hero__meta small{
+	color:var(--ct-muted);
+	font-size:.58rem;
+	text-transform:uppercase;
+	letter-spacing:.09em;
+}
+.ctv-topic-nav{
+	display:flex;
+	gap:8px;
+	overflow:auto;
+	scrollbar-width:none;
+	margin-top:28px;
+	padding-bottom:2px;
+}
+.ctv-topic-nav::-webkit-scrollbar{display:none}
+.ctv-topic-nav a{
+	flex:0 0 auto;
+	padding:8px 11px;
+	border:1px solid var(--ct-line);
+	border-radius:999px;
+	background:var(--ct-paper);
+	color:var(--ct-ink);
+	text-decoration:none;
+	font-size:.61rem;
+	font-weight:800;
+}
+.ctv-topic-nav a:hover{
+	border-color:var(--ct-orange);
+	color:var(--ct-orange);
+}
+.ctv-archive-lead{padding:26px 0 18px}
+.ctv-lead-story{
+	display:grid;
+	grid-template-columns:minmax(0,1.45fr) minmax(320px,.7fr);
+	border:1px solid var(--ct-line);
+	border-radius:24px;
+	overflow:hidden;
+	background:var(--ct-paper);
+	box-shadow:0 16px 45px rgba(11,42,74,.045);
+}
+.ctv-lead-story__media{
+	position:relative;
+	display:block;
+	min-height:450px;
+	background:var(--ct-soft);
+	overflow:hidden;
+}
+.ctv-lead-story__media img,
+.ctv-lead-story__media>.ctn-fallback{
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	transition:transform .45s ease;
+}
+.ctv-lead-story:hover .ctv-lead-story__media img{transform:scale(1.015)}
+.ctv-image-label{
+	position:absolute;
+	left:16px;
+	top:16px;
+	padding:7px 10px;
+	border-radius:999px;
+	background:rgba(255,255,255,.94);
+	color:#0b1e30;
+	font-size:.56rem;
+	font-weight:900;
+	text-transform:uppercase;
+	letter-spacing:.08em;
+	box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.ctv-lead-story__copy{
+	padding:clamp(26px,3vw,40px);
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+}
+.ctv-lead-story h2{
+	margin:12px 0 13px;
+	font-size:clamp(2rem,3vw,3.6rem);
+	line-height:.95;
+	letter-spacing:-.052em;
+}
+.ctv-lead-story h2 a{text-decoration:none}
+.ctv-lead-story__copy>p{
+	margin:0;
+	color:var(--ct-muted);
+	font-size:.8rem;
+	line-height:1.7;
+}
+.ctv-lead-story__footer{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	gap:18px;
+	margin-top:28px;
+	padding-top:18px;
+	border-top:1px solid var(--ct-line);
+}
+.ctv-lead-story__footer>div{
+	display:flex;
+	align-items:center;
+	gap:9px;
+}
+.ctv-lead-story__footer img{
+	width:40px;
+	height:40px;
+	border-radius:50%;
+	object-fit:cover;
+}
+.ctv-lead-story__footer>div>span{
+	display:flex;
+	flex-direction:column;
+}
+.ctv-lead-story__footer strong{font-size:.65rem}
+.ctv-lead-story__footer small{
+	color:var(--ct-muted);
+	font-size:.54rem;
+	margin-top:3px;
+}
+.ctv-lead-story__footer>a{
+	flex:0 0 auto;
+	color:var(--ct-orange);
+	font-size:.6rem;
+	font-weight:900;
+	text-decoration:none;
+}
+.ctv-archive-feed{padding:48px 0 72px}
+.ctv-feed-head{
+	display:flex;
+	justify-content:space-between;
+	align-items:end;
+	margin-bottom:22px;
+}
+.ctv-feed-head h2{
+	margin:6px 0 0;
+	font-size:clamp(1.9rem,3vw,3rem);
+	line-height:.95;
+	letter-spacing:-.05em;
+}
+.ctv-story-grid{
+	display:grid;
+	grid-template-columns:repeat(3,minmax(0,1fr));
+	gap:14px;
+}
+.ctv-story-grid .ct-story-card{
+	border-radius:19px;
+	box-shadow:none;
+}
+.ctv-story-grid .ct-story-card__media{
+	aspect-ratio:16/10;
+}
+.ctv-story-grid .ct-story-card__title{
+	font-size:1.08rem;
+}
+.ctv-story-grid .ct-story-card__excerpt{
+	font-size:.72rem;
+}
+.ctv-story-grid .ct-story-card__body{
+	padding:16px;
+}
+
+/* About page */
+.ctv-about{
+	background:#f7f8fa;
+}
+html[data-theme="dark"] .ctv-about{background:var(--ct-bg)}
+.ctv-about-hero{
+	padding:64px 0 56px;
+	background:linear-gradient(180deg,#fff,#f6f8f9);
+	border-bottom:1px solid var(--ct-line);
+}
+html[data-theme="dark"] .ctv-about-hero{background:linear-gradient(180deg,#0b1a28,#081522)}
+.ctv-about-hero__inner{
+	display:grid;
+	grid-template-columns:minmax(0,1.35fr) minmax(270px,.65fr);
+	gap:70px;
+	align-items:center;
+}
+.ctv-about-hero h1{
+	margin:10px 0 16px;
+	font-size:clamp(3rem,6vw,6.7rem);
+	line-height:.84;
+	letter-spacing:-.072em;
+	font-weight:800;
+}
+.ctv-about-hero h1 em{
+	font-style:normal;
+	color:#8e9ba6;
+	font-weight:700;
+}
+html[data-theme="dark"] .ctv-about-hero h1 em{color:#718493}
+.ctv-about-hero__copy>p{
+	max-width:760px;
+	margin:0;
+	color:var(--ct-muted);
+	font-size:.91rem;
+	line-height:1.75;
+}
+.ctv-about-hero__actions{
+	display:flex;
+	flex-wrap:wrap;
+	gap:8px;
+	margin-top:26px;
+}
+.ctv-about-hero__actions a{
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	min-height:42px;
+	padding:0 14px;
+	border-radius:999px;
+	background:var(--ct-orange);
+	color:#fff;
+	text-decoration:none;
+	font-size:.66rem;
+	font-weight:900;
+}
+.ctv-about-hero__actions a.is-secondary{
+	background:var(--ct-paper);
+	color:var(--ct-ink);
+	border:1px solid var(--ct-line);
+}
+.ctv-about-hero__brand{
+	aspect-ratio:1/1;
+	border:1px solid var(--ct-line);
+	border-radius:30px;
+	background:var(--ct-paper);
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+	gap:18px;
+	box-shadow:0 20px 60px rgba(11,42,74,.06);
+}
+.ctv-about-hero__brand img{
+	width:42%;
+	max-width:150px;
+	height:auto;
+}
+.ctv-about-hero__brand span{
+	color:var(--ct-muted);
+	font-size:.54rem;
+	font-weight:800;
+	letter-spacing:.14em;
+}
+.ctv-about-stats{padding:22px 0 0}
+.ctv-about-stats__grid{
+	display:grid;
+	grid-template-columns:repeat(4,1fr);
+	gap:10px;
+}
+.ctv-about-stats article{
+	padding:20px;
+	border:1px solid var(--ct-line);
+	border-radius:18px;
+	background:var(--ct-paper);
+}
+.ctv-about-stats article>span{
+	display:block;
+	color:#bac4cb;
+	font-size:1.4rem;
+	font-weight:800;
+}
+.ctv-about-stats strong{
+	display:block;
+	margin-top:14px;
+	font-size:.87rem;
+}
+.ctv-about-stats p{
+	margin:5px 0 0;
+	color:var(--ct-muted);
+	font-size:.66rem;
+	line-height:1.5;
+}
+.ctv-about-section{padding:74px 0}
+.ctv-about-section--soft{
+	background:#eef2f4;
+	border-block:1px solid var(--ct-line);
+}
+html[data-theme="dark"] .ctv-about-section--soft{background:#081522}
+.ctv-about-split{
+	display:grid;
+	grid-template-columns:1fr 1fr;
+	gap:70px;
+}
+.ctv-about-split h2,
+.ctv-about-head h2{
+	margin:8px 0 0;
+	font-size:clamp(2.3rem,4vw,4.7rem);
+	line-height:.9;
+	letter-spacing:-.06em;
+}
+.ctv-about-copy{
+	color:var(--ct-muted);
+	font-size:.86rem;
+	line-height:1.8;
+}
+.ctv-about-copy p:first-child{margin-top:0}
+.ctv-about-head{
+	display:flex;
+	align-items:end;
+	justify-content:space-between;
+	gap:30px;
+	margin-bottom:28px;
+}
+.ctv-about-head>div{max-width:850px}
+.ctv-about-head>a{
+	flex:0 0 auto;
+	color:var(--ct-orange);
+	text-decoration:none;
+	font-size:.63rem;
+	font-weight:900;
+}
+.ctv-format-grid{
+	display:grid;
+	grid-template-columns:repeat(3,1fr);
+	gap:12px;
+}
+.ctv-format-grid article{
+	padding:24px;
+	border:1px solid var(--ct-line);
+	border-radius:18px;
+	background:var(--ct-paper);
+}
+.ctv-format-grid b{
+	font-size:.9rem;
+}
+.ctv-format-grid p{
+	margin:8px 0 0;
+	color:var(--ct-muted);
+	font-size:.69rem;
+	line-height:1.55;
+}
+.ctv-about-authors{
+	display:grid;
+	grid-template-columns:repeat(6,1fr);
+	gap:10px;
+}
+.ctv-about-authors article{
+	padding:15px 10px;
+	border:1px solid var(--ct-line);
+	border-radius:18px;
+	background:var(--ct-paper);
+	text-align:center;
+}
+.ctv-about-authors img{
+	width:72px;
+	height:72px;
+	border-radius:50%;
+	object-fit:cover;
+}
+.ctv-about-authors h3{
+	margin:10px 0 3px;
+	font-size:.76rem;
+}
+.ctv-about-authors h3 a{text-decoration:none}
+.ctv-about-authors p{
+	margin:0;
+	color:var(--ct-muted);
+	font-size:.56rem;
+}
+.ctv-about-connect{padding:0 0 74px}
+.ctv-about-connect__card{
+	display:grid;
+	grid-template-columns:.9fr 1.1fr;
+	gap:60px;
+	padding:38px;
+	border-radius:24px;
+	background:linear-gradient(135deg,#0d3556,#071827);
+	color:#fff;
+}
+.ctv-about-connect h2{
+	margin:8px 0 8px;
+	font-size:clamp(2.2rem,4vw,4.2rem);
+	line-height:.9;
+	letter-spacing:-.055em;
+}
+.ctv-about-connect p{
+	margin:0;
+	color:#a9bbc7;
+	font-size:.75rem;
+}
+.ctv-about-connect__card>div:last-child{
+	border-top:1px solid rgba(255,255,255,.14);
+}
+.ctv-about-connect__card>div:last-child a{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	padding:15px 3px;
+	border-bottom:1px solid rgba(255,255,255,.14);
+	color:#fff;
+	text-decoration:none;
+	font-size:.72rem;
+	font-weight:800;
+}
+.ctv-about-connect__card>div:last-child a span{color:#ff946e}
+
+@media(max-width:1050px){
+	.ctv-story-grid{grid-template-columns:repeat(2,1fr)}
+	.ctv-about-authors{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+	.ctv-lead-story{grid-template-columns:1fr}
+	.ctv-lead-story__media{min-height:0;aspect-ratio:16/9}
+	.ctv-about-hero__inner{grid-template-columns:1fr}
+	.ctv-about-hero__brand{aspect-ratio:auto;min-height:260px}
+	.ctv-about-stats__grid{grid-template-columns:1fr 1fr}
+	.ctv-about-split{grid-template-columns:1fr;gap:22px}
+	.ctv-format-grid{grid-template-columns:1fr 1fr}
+	.ctv-about-connect__card{grid-template-columns:1fr;gap:28px}
+}
+@media(max-width:650px){
+	.ctn-brand__default{max-width:154px;max-height:44px}
+	.ctv-archive-hero{padding:30px 0 20px}
+	.ctv-archive-hero__top{grid-template-columns:1fr;gap:14px}
+	.ctv-archive-hero__meta{text-align:left;display:flex;align-items:baseline;gap:7px}
+	.ctv-archive-hero__meta span{font-size:1.45rem}
+	.ctv-archive-hero h1{font-size:clamp(2.6rem,13vw,4.3rem)}
+	.ctv-archive-lead{padding-top:16px}
+	.ctv-lead-story{border-radius:20px}
+	.ctv-lead-story__media{aspect-ratio:4/3}
+	.ctv-lead-story__copy{padding:20px}
+	.ctv-lead-story h2{font-size:2rem}
+	.ctv-lead-story__footer{align-items:flex-start;flex-direction:column}
+	.ctv-story-grid{grid-template-columns:1fr}
+	.ctv-about-hero{padding:42px 0 36px}
+	.ctv-about-hero h1{font-size:clamp(2.7rem,14vw,4.6rem)}
+	.ctv-about-stats__grid{grid-template-columns:1fr 1fr}
+	.ctv-about-section{padding:54px 0}
+	.ctv-format-grid{grid-template-columns:1fr}
+	.ctv-about-authors{display:flex;overflow:auto;scroll-snap-type:x mandatory}
+	.ctv-about-authors article{min-width:43%;scroll-snap-align:start}
+	.ctv-about-connect{padding-bottom:56px}
+	.ctv-about-connect__card{padding:28px;border-radius:20px}
+}
+@media(max-width:430px){
+	.ctv-about-stats__grid{grid-template-columns:1fr}
+	.ctv-about-authors article{min-width:50%}
+}
