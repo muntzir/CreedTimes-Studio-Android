@@ -18,6 +18,17 @@ jobs:
       - name: Checkout build branch
         uses: actions/checkout@v4
 
+      - name: Lint PHP
+        run: |
+          set -e
+          find web-build/theme/creed-times-2 -name '*.php' -print0 | xargs -0 -n1 php -l
+          find web-build/plugin/creed-times-core -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check web-build/theme/creed-times-2/assets/js/main.js
+          node --check web-build/plugin/creed-times-core/assets/js/front.js
+
       - name: Build uploadable ZIP files
         run: |
           set -e
