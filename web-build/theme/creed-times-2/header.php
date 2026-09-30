@@ -64,7 +64,7 @@ $ct_social = ct_get_social_links();
 			</div>
 			<button class="ctn-action-btn" type="button" data-search-overlay-toggle aria-label="<?php esc_attr_e( 'Search', 'creed-times' ); ?>"><?php echo ct_icon( 'search' ); ?></button>
 			<button class="ctn-action-btn ctn-theme" type="button" data-theme-toggle aria-label="<?php esc_attr_e( 'Toggle dark mode', 'creed-times' ); ?>"><?php echo ct_icon( 'moon', 'ct-theme-icon ct-theme-icon--moon' ); ?><?php echo ct_icon( 'sun', 'ct-theme-icon ct-theme-icon--sun' ); ?></button>
-			<a class="ctn-wa" href="<?php echo esc_url( $ct_social['whatsapp'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?><span>WhatsApp</span></a>
+			<a class="ctn-wa" href="<?php echo esc_url( $ct_social['whatsapp'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?><span>Join Channel</span></a>
 		</div>
 	</div>
 
@@ -88,7 +88,7 @@ $ct_social = ct_get_social_links();
 				<a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About</a>
 			</nav>
 			<div class="ctn-mobile-cta">
-				<a href="<?php echo esc_url( $ct_social['whatsapp'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?> Channel</a>
+				<a href="<?php echo esc_url( $ct_social['whatsapp'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?> Join Channel</a>
 				<a href="<?php echo esc_url( $ct_social['group'] ); ?>" target="_blank" rel="noopener"><?php echo ct_brand_icon( 'whatsapp' ); ?> Group</a>
 			</div>
 		</div>
